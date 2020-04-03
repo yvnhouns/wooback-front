@@ -25,7 +25,7 @@ const ProductsList = ({
 
   const [checkData, setCheckData] = useState({
     checked: [],
-    checkable: false
+    checkable: false,
   });
 
   const [current, setCurrent] = useState("");
@@ -34,7 +34,7 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    defaultValue: []
+    defaultValue: [],
   });
 
   const { results: posts, count } = data;
@@ -58,7 +58,7 @@ const ProductsList = ({
     isScrolling, // The List is currently being scrolled
     isVisible, // This row is visible within the List (eg it is not an overscanned row)
     style, // Style object to be applied to row (to position it)
-    parent
+    parent,
   }) {
     const content = (
       <Suspenser height={80} doubleFeadBack={false}>
@@ -80,7 +80,7 @@ const ProductsList = ({
     );
   }
 
-  const handleToggle = value => () => {
+  const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
 
@@ -103,7 +103,7 @@ const ProductsList = ({
     }
 
     if (operation === "update") {
-      const index = posts.findIndex(v => v._id === data._id);
+      const index = posts.findIndex((v) => v._id === data._id);
       if (index !== -1) {
         posts[index] = data;
         mutate(url, { ...data, results: posts });
@@ -111,9 +111,9 @@ const ProductsList = ({
     }
   };
 
-  const handleClick = item => {
+  const handleClick = (item) => {
     item && setCurrent(item.id);
-    addNextComponent(ownState => (
+    addNextComponent((ownState) => (
       <Product
         {...ownState}
         id={item ? item.id : undefined}
@@ -131,24 +131,28 @@ const ProductsList = ({
       <div className={classes.list}>
         {/* <CssBaseline /> */}
         {count > 0 ? (
-          <AutoSizer ref={listRef}>
-            {({ width, height }) => {
-              return (
-                <>
-                  <List
-                    ref={listRef}
-                    width={width}
-                    height={height}
-                    rowCount={posts.length}
-                    rowHeight={80}
-                    rowRenderer={rowRenderer}
-                  />
-                </>
-              );
-            }}
-          </AutoSizer>
+          <>
+            <AutoSizer ref={listRef}>
+              {({ width, height }) => {
+                return (
+                  <>
+                    <List
+                      ref={listRef}
+                      width={width}
+                      height={height}
+                      rowCount={posts.length}
+                      rowHeight={80}
+                      rowRenderer={rowRenderer}
+                    />
+                  </>
+                );
+              }}
+            </AutoSizer>
+          </>
         ) : (
-          <TitleTypography style={{padding:"5px 15px"}}>Auccun produit trouvé </TitleTypography>
+          <TitleTypography style={{ padding: "5px 15px" }}>
+            Auccun produit trouvé{" "}
+          </TitleTypography>
         )}
       </div>
       <div name="vous" className={classes.appBar}>
@@ -157,31 +161,34 @@ const ProductsList = ({
           color="primary"
           aria-label="add"
           className={classes.fabButton}
-          onClick={e => handleClick()}
+          onClick={(e) => handleClick()}
         >
           <AddIcon />
         </Fab>
         <div className={classes.grow} />
       </div>
+      <TitleTypography color="secondary" style={{ paddingLeft: "20px" }}>
+        {count} produit{pluriel(count)} trouvé{pluriel(count)}{" "}
+      </TitleTypography>
     </>
   );
 };
 
 export default ProductsList;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   list: {
     flexGrow: 1,
     width: "100%",
-    minHeight: "400px"
+    minHeight: "430px",
   },
   appBar: {
     top: "auto",
     bottom: 0,
-    position: "sticky"
+    position: "sticky",
   },
   grow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   fabButton: {
     position: "absolute",
@@ -189,7 +196,11 @@ const useStyles = makeStyles(theme => ({
     bottom: 10,
     left: 0,
     right: 0,
-    margin: "0 auto"
+    margin: "0 auto",
   },
-  suspense: {}
+  suspense: {},
 }));
+
+const pluriel = (count) => {
+  return count > 1 ? "s" : "";
+};

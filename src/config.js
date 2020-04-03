@@ -1,5 +1,4 @@
 export const API = process.env.REACT_APP_API_URL;
-//export const API = "http://localhost:8001/api";
 export const WOOCOMMERCE_URL = "https://oph.f19.myftpupload.com";
 export const WOOCOMMERCE_KEY = "ck_a0b788e42b32f777fa86859fa9fbe95dd0bac179";
 export const WOOCOMMERCE_SECRET = "cs_0aa8f8c8fd00d72df43eabbf1408425780b9d5f9";
