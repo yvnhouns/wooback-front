@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-// import { Debug } from "mui-rff";
+//  import { Debug } from "mui-rff";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import FormValidator from "../../components/FormValidator";
 import Suspenser from "../../components/Suspenser";
@@ -18,21 +18,21 @@ const ProductForm = ({
   categories,
   fecther,
   id,
-  nextStep
+  nextStep,
 }) => {
   const [validateHandler, setValidateHandler] = useState({
     success: false,
-    submiting: false
+    submiting: false,
   });
 
   const url = readPostUrl();
   const {
-    data: { post }
+    data: { post },
   } = useSWR(url, fecther, {
     suspense: false,
     initialData: { post: initialPost },
     refreshWhenOffline: false,
-    revalidateOnFocus: false
+    revalidateOnFocus: false,
   });
 
   const classes = useStyles();
@@ -51,10 +51,16 @@ const ProductForm = ({
 
     const formdData = {
       _id: post._id,
-      value: { ...data, id: post.content.id }
+      value: {
+        ...data,
+        id: post.content.id,
+        status: values.status,
+        stock_status: values.stock_status,
+        manage_stock: values.manage_stock,
+      },
     };
     submitProduct &&
-      submitProduct(operation, formdData, data => {
+      submitProduct(operation, formdData, (data) => {
         setValidateHandler({ submiting: false, success: true });
         nextStep({ data, operation });
       });
@@ -64,7 +70,7 @@ const ProductForm = ({
 
   const contents = ({
     form: {
-      mutators: { push, pop }
+      mutators: { push, pop },
     },
     form,
     submitting,
@@ -80,7 +86,7 @@ const ProductForm = ({
         <CssBaseline />
         <div
           style={{
-            maxHeight: "80vh"
+            maxHeight: "80vh",
           }}
         >
           <Suspenser height={100}>
@@ -97,7 +103,6 @@ const ProductForm = ({
             submiting={submiting}
             success={success}
           />
-          {/* <Debug /> */}
         </div>
       </>
     );
@@ -117,38 +122,38 @@ const ProductForm = ({
 
 export default ProductForm;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexWrap: "wrap",
-    textAlign: "center"
+    textAlign: "center",
   },
   textField: {
     // margin: theme.spacing(1, 0)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   paper: {
     width: "100%",
     padding: theme.spacing(2),
-    marginBottom: theme.spacing(2)
+    marginBottom: theme.spacing(2),
   },
   actionButtonHelper: {
-    padding: "10px 8px"
+    padding: "10px 8px",
   },
   tabLigthRoot: {
     maxHeight: "300px",
     display: "inline-block",
-    position: "relative"
+    position: "relative",
   },
   submitRow: {
     // position: "fixed",
     bottom: 0,
     top: "auto",
-    width: "100%"
+    width: "100%",
     // zIndex: 1
-  }
+  },
 }));
 
 const initialValue = {
@@ -165,14 +170,32 @@ const initialValue = {
     categories: "",
     images: "",
     type: "",
-    sale_price: ""
-  }
+    sale_price: "",
+    status: "publish",
+    stock_status: "instock",
+  },
 };
 
-const format = item => {
+const format = (item) => {
   return {
     ...item,
     regular_price: parseInt(item.regular_price || "0"),
-    sale_price: parseInt(item.sale_price || "0")
+    sale_price: parseInt(item.sale_price || "0"),
+    status:
+      item.status === null || item.status === "" || !item.status
+        ? "publish"
+        : item.status,
+
+    stock_status:
+      item.stock_status === null ||
+      item.stock_status === "" ||
+      !item.stock_status
+        ? "instock"
+        : item.stock_status,
+
+    manage_stock:
+      item.manage_stock === null || item.manage_stock === ""
+        ? true
+        : item.manage_stock,
   };
 };

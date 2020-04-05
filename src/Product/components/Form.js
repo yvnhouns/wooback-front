@@ -3,19 +3,18 @@ import SuspensePaper from "../../components/SuspensePaper";
 import { TitleTypography } from "../../components/assets";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
-
+import SimpleSelctor from "../../components/SimpleSelectorMUI";
 
 import { FormSpy } from "react-final-form";
 import Images from "./ImagesLine";
 import {
   SimpleTextField,
   NumberTextField,
-  PriceTextField
+  PriceTextField,
 } from "../../components/TextFieldMUI";
 import Checkboxes from "../../components/CheckBoxLineMui";
 
 const Form = ({ classes, categories, ...restProps }) => {
-  
   return (
     <Grid
       container
@@ -100,8 +99,22 @@ const Form = ({ classes, categories, ...restProps }) => {
               />
             </Grid>
 
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={12}>
               <Checkboxes name="featured" label="Mettre en avant" />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+              <FormSpy subscription={{ values: true }}>
+                {({ values }) => (
+                  <SimpleSelctor
+                    labelId={values.status}
+                    classes={classes}
+                    name="status"
+                    values={["draft", "pending", "private", "publish"]}
+                    label="Status"
+                    helper="status"
+                  />
+                )}
+              </FormSpy>
             </Grid>
           </Grid>
         </SuspensePaper>
@@ -125,16 +138,33 @@ const Form = ({ classes, categories, ...restProps }) => {
                 label="Ugs"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={12} sm={12}>
               <Divider />
               <Checkboxes name="manage_stock" label="Gérer le stock ?" />
-              <NumberTextField
-                className={classes.textField}
-                name="stock_quantity"
-                label="Stock"
-                helperText="Stock, si vide donc stock infini"
-                type="number"
-              />
+
+              <FormSpy subscription={{ values: true }}>
+                {({ values }) => {
+                  return !values.manage_stock ? (
+                    <SimpleSelctor
+                      labelId={values.status}
+                      classes={classes}
+                      name="stock_status"
+                      values={["instock", "outofstock", "onbackorder"]}
+                      label="Status du stock"
+                      helper="Status du stock"
+                    />
+                  ) : (
+                    <NumberTextField
+                      className={classes.textField}
+                      name="stock_quantity"
+                      label="Stock"
+                      helperText="Stock, si vide donc stock infini"
+                      type="number"
+                    />
+                  );
+                }}
+              </FormSpy>
             </Grid>
           </Grid>
         </SuspensePaper>

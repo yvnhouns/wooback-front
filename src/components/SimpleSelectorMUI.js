@@ -2,8 +2,7 @@ import React from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import { Select } from "mui-rff";
 
-export default ({
-  inputLabel,
+const SimpleSelectorMui = ({
   name,
   labelWidth,
   values,
@@ -11,6 +10,7 @@ export default ({
   labelId,
   variant = "outlined",
   fullWidth = true,
+  helper,
   ...props
 }) => {
   return (
@@ -22,8 +22,10 @@ export default ({
       variant={variant}
       inputProps={{
         name: labelId,
-        id: labelId
+        id: labelId,
       }}
+      label={label}
+      helper={helper}
     >
       {values &&
         values.map((val, index) => (
@@ -34,3 +36,5 @@ export default ({
     </Select>
   );
 };
+
+export default SimpleSelectorMui;

@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/styles";
 
 import { Select } from "mui-rff";
 
-export default ({
+const SimpleSelctorMui = ({
   classes,
   inputLabel,
   name,
@@ -17,19 +17,20 @@ export default ({
   labelId,
   variant = "outlined",
   helper,
-  fullWidth = true
+  fullWidth = true,
 }) => {
   const nativeClasses = useStyles();
-
+  const ref = React.useRef();
   return (
     <FormControl
       fullWidth={fullWidth}
       // className={classes.textField}
       margin="dense"
+      ref={ref}
       className={nativeClasses.formControl}
     >
       {label && (
-        <InputLabel ref={inputLabel} htmlFor={labelId}>
+        <InputLabel ref={ref} htmlFor={labelId}>
           {label}
         </InputLabel>
       )}
@@ -42,7 +43,7 @@ export default ({
         variant={variant}
         inputProps={{
           name: labelId,
-          id: labelId
+          id: labelId,
         }}
       >
         {values &&
@@ -57,11 +58,13 @@ export default ({
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 120
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));
+
+export default SimpleSelctorMui;
