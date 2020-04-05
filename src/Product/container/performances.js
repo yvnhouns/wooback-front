@@ -29,23 +29,24 @@ const performances = (dispatch, auth) => {
     });
   };
 
-  const wooUpdateProduct = (_id, body, next) => {
+  const wooUpdateProduct = async (_id, body, next) => {
     const { id } = body;
     delete body.id;
 
-    wooUpdateProductApi({ body, id })
+    await wooUpdateProductApi({ body, id })
       .then((response) => {
-        updateProduct({ _id, content: response.data }, ({ error }) => {
-          console.log({ error });
-        });
-
-        next({ success: true, data: response.data });
+        if (response !== undefined) {
+          updateProduct({ _id, content: response.data }, ({ error }) => {
+            error && console.log({ "vvvvv": error });
+          });
+          next({ success: true, data: response.data });
+        }
       })
       .catch((err) => {
         let error = err.response ? err.response.data.message : "failed";
         !error.response && console.log({ error: error.response });
         next({ error });
-        console.log({ error });
+        console.log({ "lllll": err });
       });
   };
 

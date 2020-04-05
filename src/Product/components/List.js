@@ -34,7 +34,7 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    defaultValue: [],
+    // refreshInterval: 10000,
   });
 
   const { results: posts, count } = data;
