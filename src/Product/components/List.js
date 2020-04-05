@@ -161,7 +161,7 @@ const ProductsList = ({
           color="primary"
           aria-label="add"
           className={classes.fabButton}
-          onClick={(e) => handleClick()}
+          //  onClick={(e) => handleClick()}
         >
           <AddIcon />
         </Fab>
