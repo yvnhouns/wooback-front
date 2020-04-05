@@ -8,24 +8,24 @@ import SearchIcon from "@material-ui/icons/Search";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: "2px 4px",
     display: "flex",
     alignItems: "center",
-    width: 400
+    width: 400,
   },
   input: {
     marginLeft: theme.spacing(1),
-    flex: 1
+    flex: 1,
   },
   iconButton: {
-    padding: 10
+    padding: 10,
   },
   divider: {
     height: 28,
-    margin: 4
-  }
+    margin: 4,
+  },
 }));
 
 export default function CustomizedInputBase({
@@ -49,7 +49,7 @@ export default function CustomizedInputBase({
         className={localClasses.input}
         placeholder="Isbn, nom , marque, collection, selection .... "
         inputProps={{
-          "aria-label": "Isbn, nom , marque, collection, selection"
+          "aria-label": "Isbn, nom , marque, collection, selection",
         }}
       />
       <Divider className={localClasses.divider} orientation="vertical" />
@@ -64,7 +64,7 @@ export default function CustomizedInputBase({
         color="primary"
         className={localClasses.iconButton}
         aria-label="import"
-        //onClick={handleUpload}
+        onClick={handleUpload}
       >
         <CloudUploadIcon />
       </IconButton>

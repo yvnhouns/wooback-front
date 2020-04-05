@@ -13,6 +13,7 @@ import { TitleTypography } from "../../components/Typography";
 import Fade from "@material-ui/core/Fade";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
+import FavoriteIcon from "@material-ui/icons/Favorite";
 
 const Row = ({
   id,
@@ -21,7 +22,7 @@ const Row = ({
   checked,
   checkable,
   post,
-  isCurrent
+  isCurrent,
 }) => {
   const product = post.content;
   const classes = useStyles();
@@ -49,7 +50,7 @@ const Row = ({
 
     return val;
   };
-  const pluriel = count => {
+  const pluriel = (count) => {
     return count > 0 ? "s" : "";
   };
   const secondaryInformation = () => {
@@ -61,11 +62,11 @@ const Row = ({
 
     const brands =
       product.brands && product.brands.length > 0
-        ? product.brands.map(item => item.name).toString() + ", "
+        ? product.brands.map((item) => item.name).toString() + ", "
         : "";
     const selections =
       product.selections && product.selections.length > 0
-        ? product.selections.map(item => item.name).toString() + ", "
+        ? product.selections.map((item) => item.name).toString() + ", "
         : "";
     return (
       <>
@@ -121,11 +122,7 @@ const Row = ({
         </ListItemAvatar>
         <ListItemText
           primary={
-            <Badge
-              variant="dot"
-              color="secondary"
-              invisible={!product.featured}
-            >
+            <>
               <TitleTypography
                 component="span"
                 variant="subtitle2"
@@ -134,7 +131,10 @@ const Row = ({
               >
                 {product.id} {product.name}
               </TitleTypography>
-            </Badge>
+              {product.featured && (
+                <FavoriteIcon fontSize="small" color="secondary" />
+              )}
+            </>
           }
           secondary={secondaryInformation()}
         />
@@ -162,22 +162,22 @@ const isEqual = (prev, next) => {
       checked: prev.checked,
       checkable: prev.checkable,
       product: prev.post,
-      isCurrent: prev.isCurrent
+      isCurrent: prev.isCurrent,
     }) ===
     JSON.stringify({
       checked: next.checked,
       checkable: next.checkable,
       product: next.post,
-      isCurrent: next.isCurrent
+      isCurrent: next.isCurrent,
     })
   );
 };
 
 export default React.memo(Row, isEqual);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    width: "100%"
-  }
+    width: "100%",
+  },
 }));

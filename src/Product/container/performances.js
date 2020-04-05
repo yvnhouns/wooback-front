@@ -4,7 +4,7 @@ import {
   createPostApi,
   importPostsApi,
   wooUpdateProductApi,
-  updatePostApi
+  updatePostApi,
 } from "./api";
 import { API } from "../../config";
 import queryString from "query-string";
@@ -13,16 +13,16 @@ import { fetcherWithToken } from "../../utils/fecthers";
 const performances = (dispatch, auth) => {
   const createProduct = (formData, next, isAuth) => {
     const { user, token } = isAuth ? isAuth : auth;
-    createPostApi(user._id, token, formData).then(data => {
+    createPostApi(user._id, token, formData).then((data) => {
       checkErrorData(data, next, async () => {
         next({ success: true, data: data.post });
       });
     });
   };
 
-  const updateProduct = (formData, next, isAuth) => {
-    const { user, token } = isAuth ? isAuth : auth;
-    updatePostApi(user._id, token, formData).then(data => {
+  const updateProduct = (formData, next) => {
+    const { user, token } = auth;
+    updatePostApi(user._id, token, formData).then((data) => {
       checkErrorData(data, next, async () => {
         next({ success: true, data: data.post });
       });
@@ -34,14 +34,14 @@ const performances = (dispatch, auth) => {
     delete body.id;
 
     wooUpdateProductApi({ body, id })
-      .then(response => {
+      .then((response) => {
         updateProduct({ _id, content: response.data }, ({ error }) => {
           console.log({ error });
         });
 
         next({ success: true, data: response.data });
       })
-      .catch(err => {
+      .catch((err) => {
         let error = err.response ? err.response.data.message : "failed";
         !error.response && console.log({ error: error.response });
         next({ error });
@@ -51,7 +51,7 @@ const performances = (dispatch, auth) => {
 
   const importLists = (posts, next) => {
     const { user, token } = auth;
-    importPostsApi(user._id, token, posts).then(data => {
+    importPostsApi(user._id, token, posts).then((data) => {
       checkErrorData(data, next, async () => {
         const { duplicatedIds, duplicatedNames, posts } = data;
         next({ success: true, duplicatedIds, duplicatedNames, data: posts });
@@ -59,27 +59,27 @@ const performances = (dispatch, auth) => {
     });
   };
 
-  const getProductsListSearchFilterUrl = searchData => {
+  const getProductsListSearchFilterUrl = (searchData) => {
     const { search, order, sortBy, limit } = searchData;
     const query = queryString.stringify({ search, order, sortBy, limit });
     return `${API}/posts/search?${query}`;
   };
 
-  const getProductsListPartialSearchFilterUrl = searchData => {
+  const getProductsListPartialSearchFilterUrl = (searchData) => {
     const { search, order, sortBy, limit, searchInFields } = searchData;
     const query = queryString.stringify({
       search,
       order,
       sortBy,
       limit,
-      searchInFields
+      searchInFields,
     });
     return `${API}/posts/partial-search?${query}`;
   };
 
   const getFecther = () => {
     const { token } = auth;
-    const fecther = link => fetcherWithToken(link, token);
+    const fecther = (link) => fetcherWithToken(link, token);
     return fecther;
   };
 
@@ -90,7 +90,7 @@ const performances = (dispatch, auth) => {
     getProductsListPartialSearchFilterUrl,
     getFecther,
     importLists,
-    wooUpdateProduct
+    wooUpdateProduct,
   };
 };
 
