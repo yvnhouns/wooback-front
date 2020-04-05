@@ -1,15 +1,15 @@
 import actions from "./actions";
 
-const adressPerformances = dispatch => {
-  const setError = data => {
-    dispatch(actions.setErrorAction(data));
+const adressPerformances = (dispatch) => {
+  const setError = (data) => {
+    dispatch(actions.setErrorAction({ error: data }));
   };
 
-  const setSuccess = data => {
-    dispatch(actions.setSucessAction(data));
+  const setSuccess = (data) => {
+    dispatch(actions.setSucessAction({ success: data }));
   };
 
-  const initialize = data => {
+  const initialize = (data) => {
     dispatch(actions.initializeAction({}));
   };
 

@@ -15,7 +15,7 @@ const Dashboard = ({
   importComponentNativeState,
   setCurrentViewerTitleAndAction,
   alertState: { setError, setSuccess },
-  previous
+  previous,
 }) => {
   const {
     getFecther,
@@ -31,7 +31,7 @@ const Dashboard = ({
     "content.name",
     "content.sku",
     "content.id",
-    "content.ugs"
+    "content.ugs",
   ];
 
   const [dataFilter, setDataFilter] = useState({ searchInFields });
@@ -40,7 +40,7 @@ const Dashboard = ({
 
   // useEffect(() => {trigger()}, [dataFilter]);
 
-  const handleFilter = name => event => {
+  const handleFilter = (name) => (event) => {
     setDataFilter({ ...dataFilter, [name]: event.target.value });
   };
 
@@ -66,7 +66,7 @@ const Dashboard = ({
     wooUpdateProduct(_id, value, ({ error, success, data }) => {
       error && setError(error);
       if (success) {
-        setSuccess("Le produit à été bien ajouté");
+        setSuccess("Le produit à été bien modifié");
         next({ _id, content: data });
       }
     });
@@ -79,12 +79,12 @@ const Dashboard = ({
 
   const nativeState = {
     comp: "product",
-    submitProduct
+    submitProduct,
   };
 
   const inputState = {
     addNextComponent,
-    setCurrentViewerTitleAndAction
+    setCurrentViewerTitleAndAction,
   };
 
   const uploadProduct = async () => {
@@ -152,23 +152,23 @@ export default React.memo(Dashboard, isEqual);
 //sale_price
 
 // const treatData = async values => {
-  // const products = await data.map(item => {
-  //   const res = {};
+// const products = await data.map(item => {
+//   const res = {};
 
-  //   for (const key in patch) {
-  //     res[key] = treatField(key, item);
-  //   }
-  //   return {
-  //     content: {
-  //       ...res,
-  //       categories: res.categories
-  //         ? res.categories.split(", ").map(s => ({ name: s }))
-  //         : [],
-  //       images: res.images ? res.images.split(", ").map(s => ({ src: s })) : []
-  //     }
-  //   };
-  // });
-  // return products;
+//   for (const key in patch) {
+//     res[key] = treatField(key, item);
+//   }
+//   return {
+//     content: {
+//       ...res,
+//       categories: res.categories
+//         ? res.categories.split(", ").map(s => ({ name: s }))
+//         : [],
+//       images: res.images ? res.images.split(", ").map(s => ({ src: s })) : []
+//     }
+//   };
+// });
+// return products;
 // };
 
 // const treatField = (key, item) => {
