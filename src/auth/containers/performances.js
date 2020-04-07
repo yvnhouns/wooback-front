@@ -1,8 +1,9 @@
 import actions from "./actions";
 import { signupApi, signinApi, signoutApi } from "./api";
-const authPerformances = dispatch => {
+const authPerformances = (dispatch) => {
+  
   const signin = async (user, next) => {
-    signinApi(user).then(async data => {
+    signinApi(user).then(async (data) => {
       checkErrorData(data, next, async () => {
         await dispatch(actions.signinAction(data));
         next({ success: true });
@@ -11,7 +12,7 @@ const authPerformances = dispatch => {
   };
 
   const signup = (user, next) => {
-    signupApi(user).then(async data => {
+    signupApi(user).then(async (data) => {
       checkErrorData(data, next, async () => {
         await dispatch(actions.signUpAction(data));
         !data.error && next();
@@ -28,26 +29,26 @@ const authPerformances = dispatch => {
     }
   };
 
-  const setOpenSigninDialog = open => {
+  const setOpenSigninDialog = (open) => {
     dispatch(actions.setOpenSigninAction(open));
   };
 
-  const setOpenSignupDialog = open => {
+  const setOpenSignupDialog = (open) => {
     dispatch(actions.setOpenSignupAction(open));
   };
 
   const signout = (auth, next) => {
     auth &&
-      signoutApi(auth.user._id).then(async data => {
+      signoutApi(auth.user._id).then(async (data) => {
         dispatch(actions.signoutAction(data));
         next();
       });
   };
-  const setAdminMode = mode => {
+  const setAdminMode = (mode) => {
     dispatch(actions.setAdminModeAction(mode));
   };
 
-  const setsetSessionId = session => {
+  const setsetSessionId = (session) => {
     dispatch(actions.setsetSessionIdAction(session));
   };
 
@@ -59,7 +60,7 @@ const authPerformances = dispatch => {
     setOpenSigninDialog,
     setOpenSignupDialog,
     setAdminMode,
-    setsetSessionId
+    setsetSessionId,
   };
 };
 

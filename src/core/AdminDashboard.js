@@ -22,7 +22,7 @@ const Dashboard = ({ width, height, ...restProps }) => {
     addNextComponent,
     viewHandleChange,
     setCurrentViewerTitleAndAction,
-    previous
+    previous,
   } = adminContext.layout;
 
   const { setSuccess, setError } = adminContext.alert;
@@ -33,12 +33,12 @@ const Dashboard = ({ width, height, ...restProps }) => {
   const feedBackInit = {
     error: false,
     success: false,
-    loading: false
+    loading: false,
   };
 
   const [submitResult, setSubmitedResult] = useState(feedBackInit);
 
-  const importComponentNativeState = nat => {
+  const importComponentNativeState = (nat) => {
     const { comp } = nat;
     setComponentState(
       componentState.comp !== comp ? { ...nat } : { ...componentState, ...nat }
@@ -47,7 +47,7 @@ const Dashboard = ({ width, height, ...restProps }) => {
   const feedBackState = {
     submitResult,
     setSubmitedResult,
-    feedBackInit
+    feedBackInit,
   };
   const state = {
     addNextComponent,
@@ -61,7 +61,7 @@ const Dashboard = ({ width, height, ...restProps }) => {
     signout,
     alertState: { setSuccess, setError },
     importComponentNativeState, // permet de sauvegarder le state de l'entrer du menu
-    ...componentState // permet de partager le state relatif au init du content en cours à tous ses enfants
+    ...componentState, // permet de partager le state relatif au init du content en cours à tous ses enfants
   };
   const currentPath = history.location.pathname;
 
@@ -100,12 +100,12 @@ const Dashboard = ({ width, height, ...restProps }) => {
   }, []);
 
   const renderContent = () => {
-    const component = allItems.find(item => item.path === currentPath);
+    const component = allItems.find((item) => item.path === currentPath);
     return component !== undefined && component.content !== undefined
       ? {
           content: component.content,
           title: component.title,
-          action: component.action
+          action: component.action,
         }
       : undefined;
   };
@@ -121,7 +121,7 @@ const Dashboard = ({ width, height, ...restProps }) => {
           onChangeIndex={viewHandleChange}
           containerStyle={{
             maxHeight: "fit-content",
-            minHeight: "fit-content"
+            minHeight: "fit-content",
           }}
           slideStyle={{ overflow: "inherit" }}
         >
@@ -140,13 +140,13 @@ const Dashboard = ({ width, height, ...restProps }) => {
 
 export default Dashboard;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     // height: "100%",
-    padding: theme.spacing(2, 4)
+    padding: theme.spacing(2, 4),
   },
   root: {
     // backgroundColor: theme.palette.background.paper,
-    width: "100%"
-  }
+    width: "100%",
+  },
 }));

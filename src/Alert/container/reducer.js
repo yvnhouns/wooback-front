@@ -3,10 +3,11 @@ import * as types from "./constants";
 const init = {
   error: false,
   success: false,
-  next: undefined
+  next: undefined,
 };
 
 const reducer = (state, action) => {
+  
   const { error, success, next } = action.payload;
   switch (action.type) {
     case types.SET_ERROR:

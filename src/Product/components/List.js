@@ -34,7 +34,7 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    // refreshInterval: 10000,
+     refreshInterval: 4000,
   });
 
   const { results: posts, count } = data;
@@ -93,7 +93,6 @@ const ProductsList = ({
     setCheckData({ ...checkData, checked: newChecked });
   };
 
-  // console.log({ posts });
 
   const handleClickNextStep = ({ data, operation }) => {
     previous();
@@ -106,7 +105,7 @@ const ProductsList = ({
       const index = posts.findIndex((v) => v._id === data._id);
       if (index !== -1) {
         posts[index] = data;
-        mutate(url, { ...data, results: posts });
+        // mutate(url, { ...data, results: posts });
       }
     }
   };

@@ -20,7 +20,7 @@ const performances = (dispatch, auth) => {
     });
   };
 
-  const updateProduct = (formData, next) => {
+  const updateProduct = async (formData, next) => {
     const { user, token } = auth;
     updatePostApi(user._id, token, formData).then((data) => {
       checkErrorData(data, next, async () => {
@@ -34,10 +34,10 @@ const performances = (dispatch, auth) => {
     delete body.id;
 
     await wooUpdateProductApi({ body, id })
-      .then((response) => {
+      .then(async (response) => {
         if (response !== undefined) {
-          updateProduct({ _id, content: response.data }, ({ error }) => {
-            error && console.log({ "vvvvv": error });
+          await updateProduct({ _id, content: response.data }, ({ error }) => {
+            error && console.log({ "vvvvv": { _id, error } });
           });
           next({ success: true, data: response.data });
         }
@@ -46,7 +46,7 @@ const performances = (dispatch, auth) => {
         let error = err.response ? err.response.data.message : "failed";
         !error.response && console.log({ error: error.response });
         next({ error });
-        console.log({ "lllll": err });
+        console.log({ "mmmmmm": { _id, err, auth } });
       });
   };
 

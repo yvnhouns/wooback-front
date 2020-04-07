@@ -7,36 +7,36 @@ import { performContextInitial } from "../utils";
 // Auth reducers
 import AuthReducer, {
   key as AuthKey,
-  init as AuthInit
+  init as AuthInit,
 } from "../auth/containers/reducer.js";
 import AuthPerformances from "../auth/containers/performances";
 
 import alertReducer, {
   key as alertKey,
-  init as alertInit
+  init as alertInit,
 } from "../Alert/container/reducer";
 import alertPerformances from "../Alert/container/performances";
 
 import ProductReducer, {
   key as ProductKey,
-  init as ProductInit
+  init as ProductInit,
 } from "../Product/container/reducer";
 import ProductPerformance from "../Product/container/performances";
 
 import LayoutReducer, {
   key as LayoutKey,
-  init as LayoutInit
+  init as LayoutInit,
 } from "../layout/containers/reducer";
 import LayoutPerformance from "../layout/containers/performances";
 
-const HomeProvider = props => {
+const HomeProvider = (props) => {
   // initial rootstate
 
   const initialValue = {
     [AuthKey]: AuthInit,
     [ProductKey]: ProductInit,
     [LayoutKey]: LayoutInit,
-    [alertKey]: alertInit
+    [alertKey]: alertInit,
   };
 
   // root reducer
@@ -44,21 +44,21 @@ const HomeProvider = props => {
     [AuthKey]: AuthReducer,
     [ProductKey]: ProductReducer,
     [LayoutKey]: LayoutReducer,
-    [alertKey]: alertReducer
+    [alertKey]: alertReducer,
   });
 
   // root state and dispatch
   const [state, dispatch] = useReducer(
     rootReducer,
     initialValue,
-    state => state,
+    (state) => state,
     "rootState"
   );
 
   // state with dispacth actions
 
   let initial = {
-    ...state
+    ...state,
   };
 
   initial = performContextInitial(state, dispatch, initial, [
@@ -68,23 +68,9 @@ const HomeProvider = props => {
     {
       key: ProductKey,
       Performance: ProductPerformance,
-      auth: state[AuthKey].isAuthenticatedUser
-    }
+      auth: state[AuthKey].isAuthenticatedUser,
+    },
   ]);
-
-  // componentWillUnmount() {
-  //   base.removeBinding(this.ref);
-  // }
-  initial = {
-    ...initial,
-    [ProductKey]: React.useMemo(() => {
-      return {
-        ...state[ProductKey],
-        ...ProductPerformance(dispatch, state[AuthKey].isAuthenticatedUser)
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [state[ProductKey]])
-  };
 
   return (
     <MainContext.Provider displayName="wooback" value={{ ...initial }}>

@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./Routes";
+import WooAdmin from "./Routes";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <WooAdmin />
   </React.StrictMode>,
   document.getElementById("root")
 );

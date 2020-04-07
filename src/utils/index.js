@@ -1,7 +1,7 @@
 import React from "react";
 import slugify from "slugify";
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // import { useTheme } from "@material-ui/core/styles";
 // import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -14,7 +14,7 @@ const performContextInitial = (state, dispatch, initial, initArray) => {
     const { key, Performance, ...resProps } = initArray[i];
     initial = {
       ...initial,
-      [key]: MemorizeState({ state, dispatch, key, Performance, ...resProps })
+      [key]: MemorizeState({ state, dispatch, key, Performance, ...resProps }),
     };
   }
   return initial;
@@ -29,15 +29,15 @@ const MemorizeState = ({ state, dispatch, key, Performance, ...resProps }) => {
         ? Performance(dispatch, resProps.auth)
         : Performance(dispatch),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch]
+    [dispatch, resProps.auth && resProps.auth]
   );
   return React.useMemo(() => {
     return {
       ...state[key],
-      ...perform
+      ...perform,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state[key]]);
+  }, [state[key], resProps.auth && resProps.auth]);
 };
 
 const calculPourcentage = (salePrice, price, tva) => {
@@ -49,10 +49,10 @@ const calculPourcentage = (salePrice, price, tva) => {
   return Math.round(pourc);
 };
 
-export const sluger = value => {
+export const sluger = (value) => {
   return slugify(value, {
     lower: true,
-    remove: /[*^#{°=}+|`_+~.()'"!:@]/g
+    remove: /[*^#{°=}+|`_+~.()'"!:@]/g,
   });
 };
 
@@ -62,24 +62,23 @@ const removeArrayFromArray = (rootArray, childArray, fieldId) => {
     const element = childArray[i];
 
     if (fieldId) {
-      mu = mu.filter(item => item[`${fieldId}`] !== element[`${fieldId}`]);
+      mu = mu.filter((item) => item[`${fieldId}`] !== element[`${fieldId}`]);
     }
     if (!fieldId) {
-      mu = mu.filter(item => item.id !== childArray[i]);
+      mu = mu.filter((item) => item.id !== childArray[i]);
     }
   }
 
   return mu;
 };
 
-const arrayFromObject = object => {
+const arrayFromObject = (object) => {
   return Object.entries(object).map(([key, item]) => item);
 };
 
-const removeUndefined = object => {
+const removeUndefined = (object) => {
   return JSON.parse(JSON.stringify(object));
 };
-
 
 const objectFromArray = async (array, key) => {
   let val = {};
@@ -99,5 +98,5 @@ export {
   calculPourcentage,
   sleep,
   removeArrayFromArray,
-  removeUndefined
+  removeUndefined,
 };
