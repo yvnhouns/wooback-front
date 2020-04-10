@@ -2,8 +2,6 @@ import actions from "./actions";
 
 import { synchroneApi, wooFecth } from "./api";
 import { wooApiEndpoints } from "./constants";
-import { API } from "../../config";
-import queryString from "query-string";
 
 const performances = (dispatch, auth) => {
   const submitSetting = (setting) => {
@@ -38,14 +36,6 @@ const performances = (dispatch, auth) => {
     if (endpoint === undefined) return queries;
 
     for (let i = page; i <= page_count; i++) {
-      const query = queryString.stringify({
-        page: i,
-        per_page,
-        order,
-        orderBy,
-      });
-      const { user } = auth;
-
       const getData = () => {
         const { response, error } = wooFecth(endpoint, {
           per_page,

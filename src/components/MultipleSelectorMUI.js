@@ -60,6 +60,7 @@ const SelectorField = ({
             style={{ width: "100%" }}
             {...renderOption}
             value={selectedValues}
+            getOptionSelected={(option, value) => option.name === value.name}
             // onChange={(event, values) => handlenativeChange(event, values)}
             //renderInput={params => <TextField {...params} label={labelText} />}
             renderInput={(params) => (

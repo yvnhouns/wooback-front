@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, {  useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 //  import { Debug } from "mui-rff";
 import Grid from "@material-ui/core/Grid";
@@ -36,10 +36,10 @@ const Importer = ({
     comp: "importer",
   };
 
-  const inputState = {
-    addNextComponent,
-    setCurrentViewerTitleAndAction,
-  };
+  // const inputState = {
+  //   addNextComponent,
+  //   setCurrentViewerTitleAndAction,
+  // };
 
   useEffect(() => {
     importComponentNativeState({ ...nativeState });
