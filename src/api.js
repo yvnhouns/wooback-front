@@ -7,4 +7,5 @@ const api = new WooCommerceRestApi({
   version: "wc/v3"
 });
 
+
 export default api;
