@@ -3,9 +3,9 @@ export const SIGNUP_LINK = "/signup";
 
 export const NOT_AUTHORIZATION_LINK = "/authorisation";
 
-
 export const ADMIN_DASHBOARD_LINK = "/admin/dashboard";
 export const ADMIN_DASHBOARD_WITH_PARAM_LINK = "/admin/:slug";
+export const ADMIN_IMPORT_LINK = "/admin/import";
 
 export const ADMIN_PRODUCTS_LINK = "/admin/produits";
 export const ADMIN_CREATE_PRODUCTS_LINK = "/admin/produit";

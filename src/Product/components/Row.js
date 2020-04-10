@@ -13,6 +13,7 @@ import Fade from "@material-ui/core/Fade";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import Chip from "@material-ui/core/Chip";
 
 const Row = ({
   id,
@@ -24,8 +25,13 @@ const Row = ({
   isCurrent,
 }) => {
   const product = post.content;
-  const classes = useStyles();
+  const classes = useStyles({ status: product.status });
   const images = product.images;
+
+  const labelStatus =
+    ["draft", "pending"].indexOf(product.status) !== -1
+      ? `~~${product.status}`
+      : "";
 
   const imageUrl = images.length > 0 ? images[0].src : "";
 
@@ -33,6 +39,7 @@ const Row = ({
   const regular_price = product.regular_price || 0;
   const salePrice = product.sale_price || 0;
 
+  const catCount = product.categories.length;
   const priceToText = () => {
     let val = "";
     val = salePrice || regular_price || price || 0;
@@ -67,6 +74,16 @@ const Row = ({
       product.selections && product.selections.length > 0
         ? product.selections.map((item) => item.name).toString() + ", "
         : "";
+    const categories = product.categories.map((item, index) => (
+      <Chip
+        key={index}
+        component="li"
+        size="small"
+        className={classes.path}
+        label={item.name}
+      />
+    ));
+
     return (
       <>
         <Typography
@@ -88,6 +105,7 @@ const Row = ({
           {variantsCount && `${variantsCount} variant${pluriel(variantsCount)}`}
           {brands}
           {selections}
+          {catCount > 0 && <> catégories : {categories} </>}
         </Typography>
       </>
     );
@@ -128,7 +146,8 @@ const Row = ({
                 className={classes.inline}
                 color="primary"
               >
-                {product.id} {product.name}
+                {product.id} {product.name}{" "}
+                <i className={classes.status}> {labelStatus} </i>
               </TitleTypography>
               {product.featured && (
                 <FavoriteIcon fontSize="small" color="secondary" />
@@ -138,14 +157,6 @@ const Row = ({
           secondary={secondaryInformation()}
         />
         <ListItemSecondaryAction>
-          {/* <IconButton edge="end" size="medium" aria-label="stock">
-            <Badge
-              overlap="circle"
-              badgeContent={product.stock_quantity}
-              max={99}
-              color="default"
-            />
-          </IconButton> */}
           <Typography>{product.stock_quantity}</Typography>
         </ListItemSecondaryAction>
       </ListItem>
@@ -178,5 +189,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: "100%",
+  },
+  status: {
+    color: "chocolate",
+  },
+  path: {
+    maxWidth: "fit-content",
+    marginRight: "5px",
+    fontSize: "12px",
+    background: `${theme.palette.background.default}`,
+    color: `${theme.palette.text.default}`,
+    height: "20px",
   },
 }));

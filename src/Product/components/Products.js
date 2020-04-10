@@ -2,7 +2,6 @@ import React, { useEffect, useState, Suspense, useContext } from "react";
 // import { getProductsApi } from "./container/api";
 import context from "../../context/AdminContext";
 import { removeUndefined } from "../../utils";
-import Paper from "@material-ui/core/Paper";
 import ProductsList from "./List";
 import SearchField from "../../components/SearchField";
 // import data from "../../data";
@@ -23,6 +22,7 @@ const Dashboard = ({
     wooUpdateProduct,
     // getProductsListSearchFilterUrl,
     getProductsListPartialSearchFilterUrl,
+    getProductsCategoriesUrl,
     // importLists
   } = useContext(context).product;
 
@@ -35,8 +35,14 @@ const Dashboard = ({
   ];
 
   const [dataFilter, setDataFilter] = useState({ searchInFields });
-  let url = getProductsListPartialSearchFilterUrl(dataFilter);
-  const fecther = getFecther();
+  let url = getProductsListPartialSearchFilterUrl({
+    ...dataFilter,
+    limit: 3000,
+  });
+
+  let categoriesUrl = getProductsCategoriesUrl();
+
+  const fetcher = getFecther();
 
   // useEffect(() => {trigger()}, [dataFilter]);
 
@@ -87,42 +93,26 @@ const Dashboard = ({
     setCurrentViewerTitleAndAction,
   };
 
-  const uploadProduct = async () => {
-    // const dataTreat = await treatData(data);
-    // let list = await removeUndefined(dataTreat);
-    // importLists(
-    //   list,
-    //   ({ error, success, data, duplicatedIds, duplicatedNames }) => {
-    //     error && setError(error);
-    //     if (success) {
-    //       setSuccess("Le produit à été bien ajouté");
-    //       setDataFilter({});
-    //       //next(data);
-    //     }
-    //   }
-    // );
-  };
-
   return (
-    <Paper>
+    <>
       <SearchField
         style={{ width: "100%", margin: "8px 0px" }}
         inputFieldProps={{ onChange: handleFilter("search") }}
-        handleUpload={uploadProduct}
       />
 
       <Suspense fallback={<LinearProgress />}>
         <ProductsList
           url={url}
+          categoriesUrl={categoriesUrl}
           submitProduct={submitProduct}
           {...nativeState}
           {...inputState}
           categories={categories}
           previous={previous}
-          fecther={fecther}
+          fetcher={fetcher}
         />
       </Suspense>
-    </Paper>
+    </>
   );
 };
 const isEqual = (prev, next) => {
@@ -130,58 +120,6 @@ const isEqual = (prev, next) => {
 };
 
 export default React.memo(Dashboard, isEqual);
-
-// id
-// ugs
-// name
-// featured
-// short_description
-// description
-// manage_stock
-// stock_quantity
-// regular_price
-// categories
-// images
-// status :{draft, pending,}
-// type :[simple, grouped, external, variable]
-// sku
-// price
-//on_sale
-//stock_status
-//backorders
-//sale_price
-
-// const treatData = async values => {
-// const products = await data.map(item => {
-//   const res = {};
-
-//   for (const key in patch) {
-//     res[key] = treatField(key, item);
-//   }
-//   return {
-//     content: {
-//       ...res,
-//       categories: res.categories
-//         ? res.categories.split(", ").map(s => ({ name: s }))
-//         : [],
-//       images: res.images ? res.images.split(", ").map(s => ({ src: s })) : []
-//     }
-//   };
-// });
-// return products;
-// };
-
-// const treatField = (key, item) => {
-//   const val = item[patch[key]];
-
-//   return ["regular_price", "price", "sale_price"].indexOf(key) !== -1
-//     ? val
-//       ? typeof val === "string"
-//         ? val.replace(",", ".").replace(/\s/g, "") * 1
-//         : val
-//       : undefined
-//     : val;
-// };
 
 // const patch = {
 //   sku: "",

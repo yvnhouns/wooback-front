@@ -1,21 +1,21 @@
-import React, { useEffect, lazy, useState } from "react";
+import React, { useEffect, lazy, useState, Suspense } from "react";
 import useSWR, { mutate } from "swr";
 import { TitleTypography } from "../../components/assets";
 
-import Product from "./Product";
 import { List, AutoSizer } from "react-virtualized";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { ButtonSimple } from "../../components/assets";
 import Suspenser from "../../components/Suspenser";
+import { LIST_URL as categoriesUrl } from "../../Categories/containers/constants";
 
 const Row = lazy(() => import("./Row"));
+const Product = lazy(() => import("./Product"));
 const ProductsList = ({
   submitProduct,
   addNextComponent,
   setCurrentViewerTitleAndAction,
-  categories,
   previous,
   url,
   fecther,
@@ -34,8 +34,10 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-     refreshInterval: 4000,
+    refreshInterval: 4000,
   });
+
+  const { categories } = useSWR(categoriesUrl, fecther);
 
   const { results: posts, count } = data;
   const handleCheckable = () => {
@@ -93,7 +95,6 @@ const ProductsList = ({
     setCheckData({ ...checkData, checked: newChecked });
   };
 
-
   const handleClickNextStep = ({ data, operation }) => {
     previous();
     if (operation === "create") {
@@ -113,15 +114,18 @@ const ProductsList = ({
   const handleClick = (item) => {
     item && setCurrent(item.id);
     addNextComponent((ownState) => (
-      <Product
-        {...ownState}
-        id={item ? item.id : undefined}
-        submitProduct={submitProduct}
-        newProduct={item === undefined}
-        initialPost={item}
-        categories={categories}
-        nextStep={handleClickNextStep}
-      />
+      <Suspense fallback="loading">
+        <Product
+          {...ownState}
+          id={item ? item.id : undefined}
+          submitProduct={submitProduct}
+          newProduct={item === undefined}
+          fecther={fecther}
+          initialPost={item}
+          categories={categories}
+          nextStep={handleClickNextStep}
+        />
+      </Suspense>
     ));
   };
 

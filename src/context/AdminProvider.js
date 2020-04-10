@@ -17,6 +17,12 @@ import alertReducer, {
 } from "../Alert/container/reducer";
 import alertPerformances from "../Alert/container/performances";
 
+import importerReducer, {
+  key as importerKey,
+  init as importerInit,
+} from "../Importer/container/reducer";
+import importerPerformances from "../Importer/container/performances";
+
 import ProductReducer, {
   key as ProductKey,
   init as ProductInit,
@@ -37,6 +43,7 @@ const HomeProvider = (props) => {
     [ProductKey]: ProductInit,
     [LayoutKey]: LayoutInit,
     [alertKey]: alertInit,
+    [importerKey]: importerInit,
   };
 
   // root reducer
@@ -45,6 +52,7 @@ const HomeProvider = (props) => {
     [ProductKey]: ProductReducer,
     [LayoutKey]: LayoutReducer,
     [alertKey]: alertReducer,
+    [importerKey]: importerReducer,
   });
 
   // root state and dispatch
@@ -65,6 +73,11 @@ const HomeProvider = (props) => {
     { key: AuthKey, Performance: AuthPerformances },
     { key: LayoutKey, Performance: LayoutPerformance },
     { key: alertKey, Performance: alertPerformances },
+    {
+      key: importerKey,
+      Performance: importerPerformances,
+      auth: state[AuthKey].isAuthenticatedUser,
+    },
     {
       key: ProductKey,
       Performance: ProductPerformance,

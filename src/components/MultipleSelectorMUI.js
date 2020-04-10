@@ -5,10 +5,9 @@ import { Autocomplete } from "mui-rff";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 
-export default ({
+const SelectorField = ({
   value,
   handleChange,
-
   labelText,
   optionFieldName = "name",
   values,
@@ -27,6 +26,7 @@ export default ({
   selectedValues,
   classes = {},
   addButton,
+  defaultOption = false,
   ...props
 }) => {
   const render = optionRender
@@ -34,15 +34,16 @@ export default ({
     : (option, { selected }) => (
         <>
           <MuiCheckbox style={{ marginRight: 8 }} checked={selected} />
-          {option[`${optionFieldName}`]}
+          {option[`${optionFieldName}`]}m
         </>
       );
 
+  const renderOption = defaultOption === true ? {} : { renderOption: render };
   const optionLabel = getOptionLabel
     ? getOptionLabel
-    : option => option[`${optionFieldName}`];
+    : (option) => option[`${optionFieldName}`];
 
-  const optionValue = getOptionValue ? getOptionValue : option => option;
+  const optionValue = getOptionValue ? getOptionValue : (option) => option;
 
   return (
     <>
@@ -57,11 +58,11 @@ export default ({
             getOptionLabel={optionLabel}
             getOptionValue={optionValue}
             style={{ width: "100%" }}
-            renderOption={render}
+            {...renderOption}
             value={selectedValues}
             // onChange={(event, values) => handlenativeChange(event, values)}
             //renderInput={params => <TextField {...params} label={labelText} />}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField
                 {...params}
                 label={label}
@@ -85,3 +86,6 @@ export default ({
     </>
   );
 };
+
+// export default React.memo(SelectorField, isEqual);
+export default SelectorField;

@@ -99,9 +99,9 @@ const reducer = (state = { init }, action) => {
 const popViewer = state => {
   const { contents, index, viewerTitles, viewerActions } = state;
   if (index > -1) {
-    viewerTitles.splice(index, 1);
-    viewerActions.splice(index, 1);
-    contents.splice(index, 1);
+    viewerTitles && viewerTitles.splice(index, 1);
+    viewerActions && viewerActions.splice(index, 1);
+    contents && contents.splice(index, 1);
 
     const popRslt = {
       contents,

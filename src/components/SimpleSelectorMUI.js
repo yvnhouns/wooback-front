@@ -37,4 +37,8 @@ const SimpleSelectorMui = ({
   );
 };
 
+// const isEqual = (prev, next) => {
+//   return JSON.stringify(prev.values) === JSON.stringify(next.values);
+// };
+// export default React.memo(SimpleSelectorMui, isEqual);
 export default SimpleSelectorMui;

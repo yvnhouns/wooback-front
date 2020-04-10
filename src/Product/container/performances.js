@@ -78,10 +78,15 @@ const performances = (dispatch, auth) => {
     return `${API}/posts/partial-search?${query}`;
   };
 
+  const getProductsCategoriesUrl = (searchData) => {
+    const { user } = auth;
+    return `${API}/categories/${user._id}`;
+  };
+
   const getFecther = () => {
     const { token } = auth;
-    const fecther = (link) => fetcherWithToken(link, token);
-    return fecther;
+    const fetcher = (link) => fetcherWithToken(link, token);
+    return fetcher;
   };
 
   return {
@@ -92,6 +97,7 @@ const performances = (dispatch, auth) => {
     getFecther,
     importLists,
     wooUpdateProduct,
+    getProductsCategoriesUrl,
   };
 };
 

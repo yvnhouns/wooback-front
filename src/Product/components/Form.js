@@ -1,4 +1,4 @@
-import React from "react";
+import React, { lazy } from "react";
 import SuspensePaper from "../../components/SuspensePaper";
 import { TitleTypography } from "../../components/assets";
 import Grid from "@material-ui/core/Grid";
@@ -6,13 +6,17 @@ import Divider from "@material-ui/core/Divider";
 import SimpleSelctor from "../../components/SimpleSelectorMUI";
 
 import { FormSpy } from "react-final-form";
-import Images from "./ImagesLine";
 import {
   SimpleTextField,
   NumberTextField,
   PriceTextField,
 } from "../../components/TextFieldMUI";
 import Checkboxes from "../../components/CheckBoxLineMui";
+
+const CatgoriesFields = lazy(() =>
+  import("../../Categories/components/CatgoriesSelector")
+);
+const Images = lazy(() => import("./ImagesLine"));
 
 const Form = ({ classes, categories, ...restProps }) => {
   return (
@@ -47,18 +51,19 @@ const Form = ({ classes, categories, ...restProps }) => {
             rows="5"
             label="Description complete"
           />
-          Cataegories
-          {/* <PostSelectorField
-          classes={classes}
-          className={classes.TextField}
-          selectedValues={categories}
-          type={"Categories"}
-          title={"Categories"}
-          name={"categories"}
-          placeholder={"Rechercher ... "}
-          label={"Categories"}
-          data={categories}
-        /> */}
+        </SuspensePaper>
+
+        <SuspensePaper>
+          <FormSpy subscription={{ values: true }}>
+            {({ values }) => (
+              <CatgoriesFields
+                classes={classes}
+                className={classes.TextField}
+                sourceCategories={categories}
+                selectedValues={values.categories}
+              />
+            )}
+          </FormSpy>
         </SuspensePaper>
 
         <SuspensePaper>
@@ -102,6 +107,7 @@ const Form = ({ classes, categories, ...restProps }) => {
             <Grid item xs={12} sm={12}>
               <Checkboxes name="featured" label="Mettre en avant" />
             </Grid>
+
             <Grid item xs={12} sm={12}>
               <FormSpy subscription={{ values: true }}>
                 {({ values }) => (

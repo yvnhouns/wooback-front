@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 //  import { Debug } from "mui-rff";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import FormValidator from "../../components/FormValidator";
+import Grid from "@material-ui/core/Grid";
+import FormValidator, {
+  defaultSuscriptioin,
+} from "../../components/FormValidator";
 import Suspenser from "../../components/Suspenser";
 import ValidationButton from "./ValidationButton";
 import useSWR from "swr";
 import { readPostUrl } from "../container/urls";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 import Form from "./Form";
 
@@ -15,23 +19,24 @@ const ProductForm = ({
   setCurrentViewerTitleAndAction,
   newProduct = true,
   initialPost = initialValue,
-  categories,
-  fecther,
+  fetcher,
   id,
   nextStep,
+  categories,
 }) => {
   const [validateHandler, setValidateHandler] = useState({
     success: false,
     submiting: false,
   });
 
-  const url = readPostUrl();
+  const url = readPostUrl(id);
+
   const {
     data: { post },
-  } = useSWR(url, fecther, {
-    suspense: false,
+  } = useSWR(url, fetcher, {
     initialData: { post: initialPost },
     refreshWhenOffline: false,
+    suspense: false,
     revalidateOnFocus: false,
   });
 
@@ -113,6 +118,9 @@ const ProductForm = ({
       <FormValidator
         onSubmit={onSubmit}
         initialValues={format(post.content)}
+        subscription={{
+          ...defaultSuscriptioin,
+        }}
         // validate={React.useCallback(() => validation, [])}
         contents={contents}
       />
@@ -198,4 +206,27 @@ const format = (item) => {
         ? true
         : item.manage_stock,
   };
+};
+
+export const SuspenseView = () => {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.paper}>
+      <Grid container>
+        <Grid item xs={12} sm={6}>
+          <Skeleton variant="rect" width={210} height={250} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Skeleton variant="rect" width={210} height={250} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Skeleton variant="rect" width={210} height={250} />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <Skeleton variant="rect" width={210} height={250} />
+        </Grid>
+      </Grid>
+    </div>
+  );
 };

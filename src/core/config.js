@@ -7,6 +7,8 @@ import * as routeLink from "../routerLinks";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import Intro from "./Intro";
 import DnsIcon from "@material-ui/icons/Dns";
+import Importer from "../Importer";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 
 export const generalItems = [
   {
@@ -14,16 +16,16 @@ export const generalItems = [
     path: routeLink.ADMIN_DASHBOARD_LINK,
     itemIcon: <DashboardIcon />,
     action: <></>,
-    content: props => <Intro {...props} />,
-    title: "ADMIN DASHBOARD"
+    content: (props) => <Intro {...props} />,
+    title: "ADMIN DASHBOARD",
   },
   {
     id: 2,
     title: "Produits",
     path: routeLink.ADMIN_PRODUCTS_LINK,
     itemIcon: <DnsIcon />,
-    content: props => <ProductDashBoard {...props} />,
-    action: <></>
+    content: (props) => <ProductDashBoard {...props} />,
+    action: <></>,
     // child: [
     //   {
     //     id: 3,
@@ -63,7 +65,7 @@ export const generalItems = [
     title: "Commandes",
     path: routeLink.ADMIN_ORDERS_LINK,
     itemIcon: <ListAltIcon />,
-    content: props => <div>Order</div> //<Order {...props} />,
+    content: (props) => <div>Order</div>, //<Order {...props} />,
 
     // child: [
     //   {
@@ -80,5 +82,29 @@ export const generalItems = [
     //     itemIcon: <DashboardIcon />
     //   }
     // ]
-  }
+  },
+  {
+    id: 17,
+    title: "Importer",
+    path: routeLink.ADMIN_IMPORT_LINK,
+    itemIcon: <CloudDownloadIcon />,
+    content: (props) => <Importer {...props} />,
+    action: <></>,
+
+    // child: [
+    //   {
+    //     id: 9,
+    //     title: "Commandes en cours",
+    //     itemIcon: <DashboardIcon />,
+    //     content: props => <div>Order</div>, //<Order {...props} />,
+    //     path: routeLink.ADMIN_ORDERS_LINK
+    //   },
+    //   {
+    //     id: 10,
+    //     title: "Commande validé",
+    //     path: "/",
+    //     itemIcon: <DashboardIcon />
+    //   }
+    // ]
+  },
 ];

@@ -21,7 +21,7 @@ import { fetcherWithBody as fetcher } from "./utils/fecthers";
 import {
   createMuiTheme,
   ThemeProvider,
-  responsiveFontSizes
+  responsiveFontSizes,
 } from "@material-ui/core/styles";
 
 let theme = createMuiTheme({
@@ -36,32 +36,32 @@ let theme = createMuiTheme({
       "sans-serif",
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"'
-    ].join(",")
-  }
+      '"Segoe UI Symbol"',
+    ].join(","),
+  },
 });
 
 theme = responsiveFontSizes(theme);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3, 0),
     transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
   toolbar: {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
     padding: theme.spacing(0, 1),
-    ...theme.mixins.toolbar
-  }
+    ...theme.mixins.toolbar,
+  },
 }));
 
 const Routes = () => {
@@ -75,7 +75,7 @@ const Routes = () => {
             suspense: true,
             refreshWhenOffline: true,
             // refreshInterval: 5000,
-            fetcher
+            fetcher,
           }}
         >
           <AdminProvider>
@@ -106,6 +106,11 @@ const Routes = () => {
 
                       <AdminRoute
                         path={adminRouteLink.ADMIN_DASHBOARD_LINK}
+                        exact
+                        component={AdminDashboard}
+                      />
+                      <AdminRoute
+                        path={adminRouteLink.ADMIN_IMPORT_LINK}
                         exact
                         component={AdminDashboard}
                       />
