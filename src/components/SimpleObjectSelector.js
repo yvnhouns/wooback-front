@@ -2,10 +2,12 @@ import React from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
-
+import { makeStyles } from "@material-ui/styles";
 import Select from "@material-ui/core/Select";
+import FormHelperText from "@material-ui/core/FormHelperText";
+
 export default ({
-  classes,
+  classes = {},
   label,
   inputLabel,
   value,
@@ -13,27 +15,27 @@ export default ({
   labelWidth,
   values,
   labelField = "name",
-  idField = "_id"
+  idField = "_id",
+  variant = "outlined",
+  helper,
 }) => {
+  const nativeClasses = useStyles();
+
   return (
     <FormControl
-      variant="outlined"
+      variant={variant}
       fullWidth
-      className={classes.textField}
+      // className={classes.textField}
       margin="dense"
+      className={nativeClasses.formControl}
     >
-      <InputLabel ref={inputLabel} htmlFor={label}>
-        {label}
-      </InputLabel>
+      {label && <InputLabel htmlFor={label}>{label}</InputLabel>}
       <Select
         margin="dense"
         value={value}
         onChange={handleChange}
         labelWidth={labelWidth}
       >
-        <MenuItem value="">
-          <em>None</em>
-        </MenuItem>
         {values &&
           values.map((val, index) => (
             <MenuItem key={val[`${idField}`]} value={val}>
@@ -41,6 +43,13 @@ export default ({
             </MenuItem>
           ))}
       </Select>
+      {helper && <FormHelperText>{helper}</FormHelperText>}
     </FormControl>
   );
 };
+
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    minWidth: 120,
+  },
+}));

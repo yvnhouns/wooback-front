@@ -1,7 +1,6 @@
 import React, { useEffect, lazy, useState, Suspense } from "react";
 import useSWR, { mutate } from "swr";
 import { TitleTypography } from "../../components/assets";
-
 import { List, AutoSizer } from "react-virtualized";
 import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
@@ -9,6 +8,7 @@ import AddIcon from "@material-ui/icons/Add";
 import { ButtonSimple } from "../../components/assets";
 import Suspenser from "../../components/Suspenser";
 import { LIST_URL as categoriesUrl } from "../../Categories/containers/constants";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const Row = lazy(() => import("./Row"));
 const Product = lazy(() => import("./Product"));
@@ -22,24 +22,24 @@ const ProductsList = ({
   ...restProps
 }) => {
   const classes = useStyles();
+  const [current, setCurrent] = useState("");
+  const listRef = React.createRef();
 
   const [checkData, setCheckData] = useState({
     checked: [],
     checkable: false,
   });
-
-  const [current, setCurrent] = useState("");
-  const listRef = React.createRef();
-
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    refreshInterval: 4000,
+    // refreshInterval: 4000,
+  });
+  const { results: posts, count } = data;
+
+  const { data: catData } = useSWR(categoriesUrl, fecther, {
+    initialData: { categories: [] },
   });
 
-  const { categories } = useSWR(categoriesUrl, fecther);
-
-  const { results: posts, count } = data;
   const handleCheckable = () => {
     setCheckData({ ...checkData, checkable: !checkable });
   };
@@ -82,10 +82,9 @@ const ProductsList = ({
     );
   }
 
-  const handleToggle = (value) => () => {
+  const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
     const newChecked = [...checked];
-
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
@@ -114,15 +113,15 @@ const ProductsList = ({
   const handleClick = (item) => {
     item && setCurrent(item.id);
     addNextComponent((ownState) => (
-      <Suspense fallback="loading">
+      <Suspense fallback={<LinearProgress />}>
         <Product
           {...ownState}
-          id={item ? item.id : undefined}
+          id={item ? item._id : undefined}
           submitProduct={submitProduct}
           newProduct={item === undefined}
           fecther={fecther}
           initialPost={item}
-          categories={categories}
+          categories={catData}
           nextStep={handleClickNextStep}
         />
       </Suspense>
@@ -177,7 +176,14 @@ const ProductsList = ({
   );
 };
 
-export default ProductsList;
+const isEqual = (prev, next) => {
+  return (
+    JSON.stringify({ url: prev !== null ? prev.url : "" }) ===
+    JSON.stringify({ url: next.url })
+  );
+};
+
+export default React.memo(ProductsList, isEqual);
 
 const useStyles = makeStyles((theme) => ({
   list: {

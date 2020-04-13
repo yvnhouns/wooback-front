@@ -3,15 +3,19 @@ import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import Typography from "@material-ui/core/Typography";
 
-const useStyles = makeStyles(theme => ({
-  popover: {}
+const useStyles = makeStyles((theme) => ({
+  popover: {},
 }));
 
-export default function SimplePopover({ actioner, content }) {
+export default function SimplePopover({
+  actioner,
+  content,
+  event = "onMouseEnter",
+}) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -24,7 +28,7 @@ export default function SimplePopover({ actioner, content }) {
 
   return (
     <div>
-      {actioner({ "aria-describedby": id, onMouseEnter: handleClick })}
+      {actioner({ "aria-describedby": id, [`${event}`]: handleClick })}
       <Popover
         id={id}
         open={open}
@@ -32,14 +36,14 @@ export default function SimplePopover({ actioner, content }) {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center"
+          horizontal: "center",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center"
+          horizontal: "center",
         }}
         PaperProps={{
-          style: { overflowY: "hidden" }
+          style: { overflowY: "hidden" },
         }}
       >
         <div className={classes.content}>{content({ handleClose })}</div>

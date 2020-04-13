@@ -5,10 +5,14 @@ import {
   importPostsApi,
   wooUpdateProductApi,
   updatePostApi,
+  wooUpdateManyProductsApi,
 } from "./api";
+import { synchroneApi } from "../../Importer/container/api";
+
 import { API } from "../../config";
 import queryString from "query-string";
 import { fetcherWithToken } from "../../utils/fecthers";
+import { encodeProductsFields, convertNumberFieds } from "./utils";
 
 const performances = (dispatch, auth) => {
   const createProduct = (formData, next, isAuth) => {
@@ -20,9 +24,11 @@ const performances = (dispatch, auth) => {
     });
   };
 
-  const updateProduct = async (formData, next) => {
+  const updateProduct = async (post, next) => {
     const { user, token } = auth;
-    updatePostApi(user._id, token, formData).then((data) => {
+    let content = (await encodeProductsFields([{ ...post.content }], true))[0];
+
+    updatePostApi(user._id, token, { ...post, content }).then((data) => {
       checkErrorData(data, next, async () => {
         next({ success: true, data: data.post });
       });
@@ -36,6 +42,7 @@ const performances = (dispatch, auth) => {
     await wooUpdateProductApi({ body, id })
       .then(async (response) => {
         if (response !== undefined) {
+          console.log({ response });
           await updateProduct({ _id, content: response.data }, ({ error }) => {
             error && console.log({ "vvvvv": { _id, error } });
           });
@@ -67,14 +74,8 @@ const performances = (dispatch, auth) => {
   };
 
   const getProductsListPartialSearchFilterUrl = (searchData) => {
-    const { search, order, sortBy, limit, searchInFields } = searchData;
-    const query = queryString.stringify({
-      search,
-      order,
-      sortBy,
-      limit,
-      searchInFields,
-    });
+    // const { search, order, sortBy, limit, searchInFields } = searchData;
+    const query = queryString.stringify({ ...searchData });
     return `${API}/posts/partial-search?${query}`;
   };
 
@@ -89,6 +90,35 @@ const performances = (dispatch, auth) => {
     return fetcher;
   };
 
+  const wooUpdateManyProducts = async (data, next) => {
+    await wooUpdateManyProductsApi(data)
+      .then(async (response) => {
+        if (response !== undefined) {
+          const products = response.data;
+          await synchroneProducts(products, ({ error }) => {
+            error && console.log({ "vvvvv": { error } });
+          });
+          next({ success: true, data: products });
+        }
+      })
+      .catch((err) => {
+        let error = err.response ? err.response.data.message : "failed";
+        !error.response && console.log({ error: error.response });
+        next({ error });
+        console.log({ "mmmmmm": { err } });
+      });
+  };
+
+  const synchroneProducts = async (products, next) => {
+    const { user, token } = auth;
+    const values = await encodeProductsFields(products, true);
+    synchroneApi(user._id, token, values).then((data) => {
+      checkErrorData(data, next, async () => {
+        next({ success: true, data: [] });
+      });
+    });
+  };
+
   return {
     createProduct,
     updateProduct,
@@ -98,6 +128,7 @@ const performances = (dispatch, auth) => {
     importLists,
     wooUpdateProduct,
     getProductsCategoriesUrl,
+    wooUpdateManyProducts,
   };
 };
 

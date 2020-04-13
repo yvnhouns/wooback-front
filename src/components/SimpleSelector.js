@@ -7,17 +7,14 @@ import { makeStyles } from "@material-ui/styles";
 
 import Select from "@material-ui/core/Select";
 export default ({
-  classes,
-  inputLabel,
   value,
   handleChange,
-  labelWidth,
   values,
   label,
   labelId,
   variant = "outlined",
   helper,
-  fullWidth = true
+  fullWidth = true,
 }) => {
   const nativeClasses = useStyles();
 
@@ -29,21 +26,18 @@ export default ({
       margin="dense"
       className={nativeClasses.formControl}
     >
-      {label && (
-        <InputLabel ref={inputLabel} htmlFor={labelId}>
-          {label}
-        </InputLabel>
-      )}
+      {label && <InputLabel id={labelId}>{label}</InputLabel>}
+
       <Select
         margin="dense"
         value={value}
+        labelId={labelId}
         onChange={handleChange}
-        labelWidth={labelWidth}
-        inputProps={{
-          name: labelId,
-          id: labelId
-        }}
       >
+        <MenuItem value={undefined}>
+          <em>None</em>
+        </MenuItem>
+
         {values &&
           values.map((val, index) => (
             <MenuItem key={index} value={val}>
@@ -51,16 +45,17 @@ export default ({
             </MenuItem>
           ))}
       </Select>
+
       {helper && <FormHelperText>{helper}</FormHelperText>}
     </FormControl>
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 120
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing(2)
-  }
+    marginTop: theme.spacing(2),
+  },
 }));

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-//  import { Debug } from "mui-rff";
+// import { Debug } from "mui-rff";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import FormValidator, {
@@ -11,7 +11,7 @@ import ValidationButton from "./ValidationButton";
 import useSWR from "swr";
 import { readPostUrl } from "../container/urls";
 import Skeleton from "@material-ui/lab/Skeleton";
-
+import { decodeFields } from "../container/utils";
 import Form from "./Form";
 
 const ProductForm = ({
@@ -20,7 +20,7 @@ const ProductForm = ({
   newProduct = true,
   initialPost = initialValue,
   fetcher,
-  id,
+  id,//_id,
   nextStep,
   categories,
 }) => {
@@ -36,8 +36,7 @@ const ProductForm = ({
   } = useSWR(url, fetcher, {
     initialData: { post: initialPost },
     refreshWhenOffline: false,
-    suspense: false,
-    revalidateOnFocus: false,
+    suspense: true,
   });
 
   const classes = useStyles();
@@ -117,7 +116,7 @@ const ProductForm = ({
     <>
       <FormValidator
         onSubmit={onSubmit}
-        initialValues={format(post.content)}
+        initialValues={format(post ? post.content : initialValue.content)}
         subscription={{
           ...defaultSuscriptioin,
         }}
@@ -205,6 +204,7 @@ const format = (item) => {
       item.manage_stock === null || item.manage_stock === ""
         ? true
         : item.manage_stock,
+    ...decodeFields(item),
   };
 };
 

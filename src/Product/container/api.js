@@ -3,7 +3,7 @@ import {
   API,
   WOOCOMMERCE_URL,
   WOOCOMMERCE_KEY,
-  WOOCOMMERCE_SECRET
+  WOOCOMMERCE_SECRET,
 } from "../../config";
 
 const WooCommerceRestApi = require("@woocommerce/woocommerce-rest-api").default;
@@ -21,9 +21,9 @@ export const createPostApi = async (userId, token, post) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(post)
+      body: JSON.stringify(post),
     });
     return response.json();
   } catch (err) {
@@ -44,9 +44,9 @@ export const importPostsApi = async (userId, token, posts) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ posts })
+      body: JSON.stringify({ posts }),
     });
     return response.json();
   } catch (err) {
@@ -67,9 +67,9 @@ export const updatePostApi = async (userId, token, post) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(post)
+      body: JSON.stringify(post),
     });
     return response.json();
   } catch (err) {
@@ -90,9 +90,9 @@ export const updatePostsApi = async (userId, token, selections) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(selections)
+      body: JSON.stringify(selections),
     });
     return response.json();
   } catch (err) {
@@ -101,9 +101,18 @@ export const updatePostsApi = async (userId, token, selections) => {
 };
 
 export const wooUpdateProductApi = async ({ body, id }) => {
-  
   try {
     const response = await wooApi.put("products/" + id, { ...body });
+    return response;
+  } catch (err) {
+    console.log({ err });
+    console.log(err);
+  }
+};
+
+export const wooUpdateManyProductsApi = async (data) => {
+  try {
+    const response = await wooApi.post("products/batch", { ...data });
     return response;
   } catch (err) {
     console.log({ err });
@@ -116,5 +125,5 @@ const wooApi = new WooCommerceRestApi({
   consumerKey: WOOCOMMERCE_KEY,
   consumerSecret: WOOCOMMERCE_SECRET,
   version: "wc/v3",
-  queryStringAuth: true
+  queryStringAuth: true,
 });

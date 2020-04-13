@@ -1,78 +1,44 @@
 import React from "react";
-import MultipleSelectorMUI from "../../components/MultipleSelectorMUI";
+import MultipleSelector from "../../components/MultipleSelector";
 import useSWR from "swr";
-// import { makeStyles } from "@material-ui/core/styles";
-// import Typography from "@material-ui/core/Typography";
-// import Chip from "@material-ui/core/Chip";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-// import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-// import CheckBoxIcon from "@material-ui/icons/CheckBox";
-// import Grid from "@material-ui/core/Grid";
-// const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-// const checkedIcon = <CheckBoxIcon color="primary" fontSize="small" />;
 
-import { LIST_URL } from "../containers/constants";
+import { LIST_SLUGS } from "../containers/constants";
 
 const CategorieSelector = ({
   fullWidth = true,
-  inputProps,
   variant,
-  className,
-  selectedValues,
-  sourceCategories = { categories: [] },
-  classes = {},
+  placeholder,
+  helperText,
+  labelText,
+  handleChange,
+  value,
 }) => {
-  const { data, error } = useSWR(LIST_URL, {
+  const { data, error } = useSWR(LIST_SLUGS, {
     refreshInterval: 0,
-    revalidateOnFocus: false,
-    initialData: sourceCategories,
-    suspense: false,
+    revalidateOnFocus: true,
+    initialData: [],
+    suspense: true,
   });
 
   if (error) {
     console.log({ error });
   }
-
-  // const optionRender = (option, { selected }) => (
-  //   <>
-  //     <Grid direction="column" spacing={0} container>
-  //       <FormControlLabel
-  //         className={nativeClasses.label}
-  //         control={
-  //           <Checkbox
-  //             icon={icon}
-  //             checkedIcon={checkedIcon}
-  //             checked={selected}
-  //           />
-  //         }
-  //         label={<Typography>{option.name}</Typography>}
-  //       />
-  //       <Chip
-  //         component={Typography}
-  //         className={nativeClasses.path}
-  //         size="small"
-  //         label={option.name}
-  //       />
-  //     </Grid>
-  //   </>
-  // );
-
+  
   return (
     <>
-      <MultipleSelectorMUI
-        name="categories"
-        className={className}
-        variant={variant}
+      <MultipleSelector
         fullWidth={fullWidth}
-        inputProps={inputProps}
-        optionFieldName="name"
-        getOptionValue={(option) => option}
-        placeholder="Rechercher les catégories"
-        label="Catégories"
-        values={data.categories}
-        selectedValues={selectedValues}
+        value={value}
+        handleChange={handleChange}
+        labelText={labelText}
+        placeholder={placeholder}
+        values={data}
+        multiple={false}
         defaultOption={true}
+        variant={variant}
+        helperText={helperText}
+        getOptionLabel={(option) => option}
+        disableCloseOnSelect={false}
       />
     </>
   );
@@ -81,12 +47,10 @@ const CategorieSelector = ({
 const isEqual = (prev, next) => {
   return (
     JSON.stringify({
-      // values: prev.values,
-      selectedValues: prev.selectedValues,
+      value: prev.value,
     }) ===
     JSON.stringify({
-      // values: next.values,
-      selectedValues: next.selectedValues,
+      value: next.value,
     })
   );
 };

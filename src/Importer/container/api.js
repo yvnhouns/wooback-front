@@ -54,7 +54,12 @@ export const importPostsApi = async (userId, token, posts) => {
   }
 };
 
-export const synchroneApi = async (userId, token, posts, endpoints) => {
+export const synchroneApi = async (
+  userId,
+  token,
+  posts,
+  endpoints = "products/"
+) => {
   let str = endpoints.split("/");
   const name = str[str.length - 2];
   try {

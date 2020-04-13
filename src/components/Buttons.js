@@ -17,6 +17,7 @@ import MuiButton from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 const NextIconButton = ({ size = "small", ...props }) => (
   <IconButton
@@ -99,10 +100,10 @@ const AddIconButton = ({ size = "small", ...props }) => (
   </IconButton>
 );
 
-const SaveIconButton = ({ size = "small", ...props }) => (
+const SaveIconButton = ({ size = "small", style, ...props }) => (
   <IconButton
     size={size}
-    style={{ padding: size === "small" ? "4px" : "8px" }}
+    style={{ padding: size === "small" ? "4px" : "8px", ...style }}
     {...props}
   >
     <SaveIcon style={{ fontSize: size === "small" ? "1rem" : "1.3rem" }} />
@@ -166,6 +167,17 @@ const DeleteIconButton = ({ size = "small", ...props }) => (
   </IconButton>
 );
 
+const CancelIconButton = ({ size = "small", style, ...props }) => (
+  <IconButton
+    size={size}
+    style={{ padding: size === "small" ? "4px" : "8px", ...style }}
+    {...props}
+    color="secondary"
+  >
+    <CancelIcon style={{ fontSize: size === "small" ? "1rem" : "1.3rem" }} />
+  </IconButton>
+);
+
 const AddFabButton = ({ size = "medium", ...restProps }) => (
   <Fab color="primary" size={size} {...restProps} aria-label="add">
     <AddIcon />
@@ -184,13 +196,13 @@ const DeleteFabButton = ({ size = "medium", ...restProps }) => (
   </Fab>
 );
 
-const ButtonWithIcon = withStyles(theme => ({
+const ButtonWithIcon = withStyles((theme) => ({
   root: {
     margin: theme.spacing(1),
     textTransform: "unset",
     //  color: theme.palette.grey["A400"],
-    lineHeight: "1"
-  }
+    lineHeight: "1",
+  },
 }))(({ icon = <ReplayIcon />, ...props }) => (
   <MuiButton
     size="small"
@@ -201,13 +213,13 @@ const ButtonWithIcon = withStyles(theme => ({
   />
 ));
 
-const ButtonSimple = withStyles(theme => ({
+const ButtonSimple = withStyles((theme) => ({
   root: {
     margin: theme.spacing(1),
     textTransform: "unset",
     //  color: theme.palette.grey["A400"],
-    lineHeight: "1"
-  }
+    lineHeight: "1",
+  },
 }))(({ ...props }) => (
   <MuiButton size="small" variant="outlined" color="inherit" {...props} />
 ));
@@ -250,5 +262,6 @@ export {
   ClearAllIconButton,
   SaveIconButton,
   ButtonSimple,
-  LinkButton
+  LinkButton,
+  CancelIconButton,
 };

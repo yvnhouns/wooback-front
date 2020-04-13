@@ -4,8 +4,13 @@ import context from "../../context/AdminContext";
 import { removeUndefined } from "../../utils";
 import ProductsList from "./List";
 import SearchField from "../../components/SearchField";
-// import data from "../../data";
+import { LinkButton } from "../../components/LinkButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import Grid from "@material-ui/core/Grid";
+import ColumnSelector from "./ColumnSelector";
+import ColumnFilter from "./ColumnFilter";
+
+import FieldSorter from "./FieldSorter";
 
 const Dashboard = ({
   setCurrentViewTitle,
@@ -26,37 +31,28 @@ const Dashboard = ({
     // importLists
   } = useContext(context).product;
 
-  const searchInFields = [
-    "id",
-    "content.name",
-    "content.sku",
-    "content.id",
-    "content.ugs",
-  ];
+  const [dataFilter, setDataFilter] = useState({
+    searchInFields,
+    filtered: {},
+    columnsFilter: { columns: initColumns, show: false, addNew: false },
+  });
+  const { columnsFilter, filtered } = dataFilter;
+  const { show, columns, addNew } = columnsFilter;
 
-  const [dataFilter, setDataFilter] = useState({ searchInFields });
   let url = getProductsListPartialSearchFilterUrl({
     ...dataFilter,
+    ...filtered,
+    columnsFilter: undefined,
+    filtered: undefined,
     limit: 3000,
   });
 
   let categoriesUrl = getProductsCategoriesUrl();
-
   const fetcher = getFecther();
 
   // useEffect(() => {trigger()}, [dataFilter]);
 
-  const handleFilter = (name) => (event) => {
-    setDataFilter({ ...dataFilter, [name]: event.target.value });
-  };
-
-  const categories = [];
-
-  useEffect(() => {
-    importComponentNativeState({ ...nativeState });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  /** Manage Product */
   const add = (values, next) => {
     createProduct(removeUndefined(values), ({ error, success, data }) => {
       error && setError(error);
@@ -93,12 +89,113 @@ const Dashboard = ({
     setCurrentViewerTitleAndAction,
   };
 
+  useEffect(() => {
+    importComponentNativeState({ ...nativeState });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleFilter = (name) => (data) => {
+    switch (name) {
+      case "search":
+        setDataFilter({ ...dataFilter, [name]: data.target.value });
+        break;
+
+      case "column":
+        if (data) {
+          const index = columns.findIndex((item) => item.id === data.id);
+          if (index !== -1) {
+            columns[index] = { ...data };
+          }
+
+          setDataFilter({
+            ...dataFilter,
+            columnsFilter: { ...columnsFilter, columns, addNew: false },
+            filtered: { ...filtered, [`${data.id}`]: data.value },
+          });
+        } else {
+          setDataFilter({
+            ...dataFilter,
+            columnsFilter: { ...columnsFilter, addNew: false },
+          });
+        }
+        break;
+
+      case "addNew":
+        setDataFilter({
+          ...dataFilter,
+          columnsFilter: { ...columnsFilter, addNew: true },
+        });
+        break;
+
+      case "sorter":
+        setDataFilter({
+          ...dataFilter,
+          filtered: { ...filtered, ...data },
+        });
+        break;
+
+      case "showFilter":
+        const newShow = !show;
+        setDataFilter({
+          ...dataFilter,
+          columnsFilter: {
+            ...columnsFilter,
+            show: newShow,
+            filtered: !newShow ? {} : filtered,
+          },
+        });
+        break;
+
+      default:
+        setDataFilter({ ...dataFilter, ...data });
+        break;
+    }
+    
+  };
+
+  const filter = (
+    <Grid spacing={1} container justify="flex-start" direction="row">
+      <Grid item>
+        <FieldSorter updateValue={handleFilter("sorter")} />
+      </Grid>
+
+      {columns
+        .filter((item) => item.showed)
+        .map((column, index) => (
+          <Grid key={index} item>
+            <ColumnFilter
+              column={column}
+              updateValue={handleFilter("column")}
+            />
+          </Grid>
+        ))}
+
+      {addNew ? (
+        <Grid item>
+          <ColumnSelector
+            columns={columns.filter((item) => !item.showed)}
+            handleValidate={handleFilter("column")}
+          />
+        </Grid>
+      ) : (
+        <Grid style={{ margin: "auto 12px" }} item>
+          <LinkButton onClick={handleFilter("addNew")}>
+            Ajouter un filtre de colonne
+          </LinkButton>
+        </Grid>
+      )}
+    </Grid>
+  );
+
   return (
     <>
       <SearchField
         style={{ width: "100%", margin: "8px 0px" }}
         inputFieldProps={{ onChange: handleFilter("search") }}
+        handleShowFilter={handleFilter("showFilter")}
       />
+
+      {show && filter}
 
       <Suspense fallback={<LinearProgress />}>
         <ProductsList
@@ -107,7 +204,6 @@ const Dashboard = ({
           submitProduct={submitProduct}
           {...nativeState}
           {...inputState}
-          categories={categories}
           previous={previous}
           fetcher={fetcher}
         />
@@ -138,3 +234,30 @@ export default React.memo(Dashboard, isEqual);
 //   type: "type",
 //   sale_price: "Tarif promo"
 // };
+
+const initColumns = [
+  {
+    id: "content.status",
+    label: "Status",
+    values: ["publish", "draft", "pending", "private"],
+  },
+  {
+    id: "content.type",
+    label: "type de produit",
+    values: ["simple", "grouped", "external", "variable"],
+  },
+  {
+    id: "content.stock_status",
+    label: "stock",
+    values: ["instock", "outofstock", "onbackorder"],
+  },
+  { id: "category", label: "Catégorie", values: [] },
+];
+
+const searchInFields = [
+  "id",
+  "content.name",
+  "content.sku",
+  "content.id",
+  "content.ugs",
+];

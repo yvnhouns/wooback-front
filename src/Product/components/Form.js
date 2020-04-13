@@ -14,7 +14,7 @@ import {
 import Checkboxes from "../../components/CheckBoxLineMui";
 
 const CatgoriesFields = lazy(() =>
-  import("../../Categories/components/CatgoriesSelector")
+  import("../../Categories/components/CatgoriesSelectorMui")
 );
 const Images = lazy(() => import("./ImagesLine"));
 
@@ -60,7 +60,7 @@ const Form = ({ classes, categories, ...restProps }) => {
                 classes={classes}
                 className={classes.TextField}
                 sourceCategories={categories}
-                selectedValues={values.categories}
+                selectedValues={values.categories || []}
               />
             )}
           </FormSpy>
@@ -69,7 +69,7 @@ const Form = ({ classes, categories, ...restProps }) => {
         <SuspensePaper>
           <FormSpy subscription={{ values: true }}>
             {({ values }) => {
-              return <Images tileData={values.images} />;
+              return <Images tileData={values.images || []} />;
             }}
           </FormSpy>
         </SuspensePaper>

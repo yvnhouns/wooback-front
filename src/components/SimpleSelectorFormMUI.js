@@ -30,7 +30,7 @@ const SimpleSelctorMui = ({
       className={nativeClasses.formControl}
     >
       {label && (
-        <InputLabel ref={ref} htmlFor={labelId}>
+        <InputLabel  htmlFor={labelId}>
           {label}
         </InputLabel>
       )}

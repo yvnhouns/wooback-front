@@ -17,13 +17,18 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon color="primary" fontSize="small" />;
 
 export default ({
-  classes,
   value,
   handleChange,
-  labelWidth,
   labelText,
   placeholder,
-  values
+  multiple = true,
+  defaultOption = false,
+  fullWidth = true,
+  disableCloseOnSelect = true,
+  variant = "outlined",
+  getOptionLabel = (option) => option.name,
+  helperText,
+  values,
 }) => {
   const nativeClasses = useStyles();
 
@@ -53,31 +58,42 @@ export default ({
   const handlenativeChange = (event, value) => {
     handleChange({ target: { value } });
   };
+  const helper = helperText ? { helperText: "Some important text" } : {};
 
+  const renderOption =
+    defaultOption === true ? {} : { renderOption: optionRender };
   return (
     <>
       <Autocomplete
         size="small"
-        multiple
+        multiple={multiple}
         value={value}
-        disableCloseOnSelect
+        disableCloseOnSelect={disableCloseOnSelect}
         options={values}
         noOptionsText="aucun resultat"
-        getOptionLabel={option => option.name}
+        getOptionLabel={getOptionLabel}
         style={{ width: "100%" }}
-        renderOption={optionRender}
+        {...renderOption}
         onChange={(event, values) => handlenativeChange(event, values)}
-        renderInput={params => <TextField {...params} label={labelText} placeholder={placeholder} />}
-      />  
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth={fullWidth}
+            label={labelText}
+            placeholder={placeholder}
+            {...helper}
+          />
+        )}
+      />
     </>
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   label: {
     //  marginTop:"8px",
     //  marginLeft:"4px",
-    height: "32px"
+    height: "32px",
   },
   path: {
     maxWidth: "fit-content",
@@ -85,6 +101,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: "12px",
     background: `${theme.palette.background.default}`,
     color: `${theme.palette.text.default}`,
-    height: "20px"
-  }
+    height: "20px",
+  },
 }));

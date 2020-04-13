@@ -16,7 +16,6 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import Chip from "@material-ui/core/Chip";
 
 const Row = ({
-  id,
   handleToggle,
   handleClick,
   checked,
@@ -119,17 +118,17 @@ const Row = ({
         dense
         button
         selected={isCurrent}
-        onClick={checkable ? handleToggle(id) : () => handleClick()}
+        onClick={() => (checkable ? handleToggle(product.id) : handleClick())}
       >
         {checkable && (
           <Fade in={checkable} timeout={2000}>
             <ListItemIcon>
               <Checkbox
                 edge="start"
-                checked={checked.indexOf(id) !== -1}
+                checked={checked.indexOf(product.id) !== -1}
                 tabIndex={-1}
                 disableRipple
-                inputProps={{ "aria-labelledby": `product-list-${id}` }}
+                inputProps={{ "aria-labelledby": `product-list-${product.id}` }}
               />
             </ListItemIcon>
           </Fade>

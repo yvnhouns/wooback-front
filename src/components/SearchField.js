@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedInputBase({
   inputFieldProps,
-  handleUpload,
+  handleShowFilter,
   ...paperProps
 }) {
   const localClasses = useStyles();
@@ -56,17 +56,10 @@ export default function CustomizedInputBase({
       <IconButton
         color="primary"
         className={localClasses.iconButton}
+        onClick={handleShowFilter}
         aria-label="filter"
       >
         <FilterListIcon />
-      </IconButton>
-      <IconButton
-        color="primary"
-        className={localClasses.iconButton}
-        aria-label="import"
-        onClick={handleUpload}
-      >
-        <CloudUploadIcon />
       </IconButton>
     </Paper>
   );
