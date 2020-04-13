@@ -41,9 +41,8 @@ const Dashboard = ({
 
   let url = getProductsListPartialSearchFilterUrl({
     ...dataFilter,
-    ...filtered,
+    filtered,
     columnsFilter: undefined,
-    filtered: undefined,
     limit: 3000,
   });
 
@@ -150,7 +149,6 @@ const Dashboard = ({
         setDataFilter({ ...dataFilter, ...data });
         break;
     }
-    
   };
 
   const filter = (

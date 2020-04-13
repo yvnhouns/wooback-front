@@ -33,7 +33,7 @@ export default {
 
   isEmpty: function (val) {
     if (val) {
-      return val === null || val.length == 0 || /^\s+$/.test(val);
+      return val === null || val.length === 0 || /^\s+$/.test(val);
     } else {
       return true;
     }
@@ -558,7 +558,7 @@ export default {
   NumericalToHTML: function (s) {
     return this.swapArrayVals(s, this.arr2, this.arr1);
   },
-  
+
   // Numerically encodes all unicode characters
   numEncode: function (s) {
     if (this.isEmpty(s)) return "";
@@ -621,7 +621,7 @@ export default {
 
     // if allowing double encoding we do ampersands first
     if (dbl) {
-      if (this.EncodeType == "numerical") {
+      if (this.EncodeType === "numerical") {
         s = s.replace(/&/g, "&#38;");
       } else {
         s = s.replace(/&/g, "&amp;");
@@ -631,7 +631,7 @@ export default {
     // convert the xss chars to numerical entities ' " < >
     s = this.XSSEncode(s, false);
 
-    if (this.EncodeType == "numerical" || !dbl) {
+    if (this.EncodeType === "numerical" || !dbl) {
       // Now call function that will convert any HTML entities to numerical codes
       s = this.HTML2Numerical(s);
     }
@@ -648,7 +648,7 @@ export default {
     if (!dbl) {
       s = s.replace(/&#/g, "##AMPHASH##");
 
-      if (this.EncodeType == "numerical") {
+      if (this.EncodeType === "numerical") {
         s = s.replace(/&/g, "&#38;");
       } else {
         s = s.replace(/&/g, "&amp;");
@@ -666,7 +666,7 @@ export default {
     }
 
     // now do we need to convert our numerical encoded string into entities
-    if (this.EncodeType == "entity") {
+    if (this.EncodeType === "entity") {
       s = this.NumericalToHTML(s);
     }
 
@@ -723,7 +723,7 @@ export default {
     if (arr1 && arr2) {
       //ShowDebug("in swapArrayVals arr1.length = " + arr1.length + " arr2.length = " + arr2.length)
       // array lengths must match
-      if (arr1.length == arr2.length) {
+      if (arr1.length === arr2.length) {
         for (var x = 0, i = arr1.length; x < i; x++) {
           re = new RegExp(arr1[x], "g");
           s = s.replace(re, arr2[x]); //swap arr1 item with matching item from arr2

@@ -20,7 +20,7 @@ const ProductForm = ({
   newProduct = true,
   initialPost = initialValue,
   fetcher,
-  id,//_id,
+  id, //_id,
   nextStep,
   categories,
 }) => {
@@ -36,6 +36,7 @@ const ProductForm = ({
   } = useSWR(url, fetcher, {
     initialData: { post: initialPost },
     refreshWhenOffline: false,
+    dedupingInterval: 0,
     suspense: true,
   });
 
