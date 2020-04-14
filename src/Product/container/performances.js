@@ -12,6 +12,8 @@ import { synchroneApi } from "../../Importer/container/api";
 import { API } from "../../config";
 import queryString from "query-string";
 import { fetcherWithToken } from "../../utils/fecthers";
+import { objectFromArray } from "../../utils";
+
 import { encodeProductsFields } from "./utils";
 
 const performances = (dispatch, auth) => {
@@ -75,11 +77,12 @@ const performances = (dispatch, auth) => {
 
   const getProductsListPartialSearchFilterUrl = (searchData) => {
     // const { search, order, sortBy, limit, searchInFields } = searchData;
-    const { filtered } = searchData;
+    const { allFeatured } = searchData;
+
     const query = queryString.stringify({
       ...searchData,
-      ...filtered,
-      filtered: undefined,
+      ...allFeatured,
+      allFeatured: undefined,
     });
     return `${API}/posts/partial-search?${query}`;
   };

@@ -5,13 +5,15 @@ import { removeUndefined } from "../../utils";
 import ProductsList from "./List";
 import SearchField from "../../components/SearchField";
 import { LinkButton } from "../../components/LinkButton";
+import { SettingsIconButton } from "../../components/Buttons";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Box from "@material-ui/core/Box";
 import ColumnSelector from "./ColumnSelector";
 import ColumnFilter from "./ColumnFilter";
-
 import FieldSorter from "./FieldSorter";
-
+import ConfigSetting from "./FilterSetting/Dialog";
 const Dashboard = ({
   setCurrentViewTitle,
   setCurrentViewAction,
@@ -33,23 +35,22 @@ const Dashboard = ({
 
   const [dataFilter, setDataFilter] = useState({
     searchInFields,
-    filtered: {},
+    fiterSetting: [...typeOfFilters],
     columnsFilter: { columns: initColumns, show: false, addNew: false },
+    allFeatured: {},
   });
-  const { columnsFilter, filtered } = dataFilter;
+  const { columnsFilter, fiterSetting, allFeatured } = dataFilter;
   const { show, columns, addNew } = columnsFilter;
 
   let url = getProductsListPartialSearchFilterUrl({
     ...dataFilter,
-    filtered,
+    allFeatured,
     columnsFilter: undefined,
-    limit: 3000,
+    fiterSetting: undefined,
   });
 
   let categoriesUrl = getProductsCategoriesUrl();
   const fetcher = getFecther();
-
-  // useEffect(() => {trigger()}, [dataFilter]);
 
   /** Manage Product */
   const add = (values, next) => {
@@ -94,9 +95,12 @@ const Dashboard = ({
   }, []);
 
   const handleFilter = (name) => (data) => {
+    const colSetId = fiterSetting.findIndex((item) => item.id === name);
+    const filtered = colSetId > 0 ? fiterSetting[colSetId].filtered : undefined;
+    let newValue = {};
     switch (name) {
       case "search":
-        setDataFilter({ ...dataFilter, [name]: data.target.value });
+        newValue = { [name]: data.target.value };
         break;
 
       case "column":
@@ -106,83 +110,88 @@ const Dashboard = ({
             columns[index] = { ...data };
           }
 
-          setDataFilter({
-            ...dataFilter,
+          const newFiltered = { ...filtered, [`${data.id}`]: data.value };
+          fiterSetting[colSetId] = {
+            ...fiterSetting[colSetId],
+            // active: !isEmpty(filtered),
+            filtered: newFiltered,
+          };
+
+          newValue = {
             columnsFilter: { ...columnsFilter, columns, addNew: false },
-            filtered: { ...filtered, [`${data.id}`]: data.value },
-          });
+            fiterSetting,
+          };
         } else {
-          setDataFilter({
-            ...dataFilter,
-            columnsFilter: { ...columnsFilter, addNew: false },
-          });
+          newValue = { columnsFilter: { ...columnsFilter, addNew: false } };
         }
         break;
 
       case "addNew":
-        setDataFilter({
-          ...dataFilter,
-          columnsFilter: { ...columnsFilter, addNew: true },
-        });
+        newValue = { columnsFilter: { ...columnsFilter, addNew: true } };
+        break;
+      case "limit":
+        newValue = { limit: data };
         break;
 
       case "sorter":
-        setDataFilter({
-          ...dataFilter,
-          filtered: { ...filtered, ...data },
-        });
+        const newFiltered = { ...filtered, ...data };
+        fiterSetting[colSetId] = {
+          ...fiterSetting[colSetId],
+          filtered: newFiltered,
+        };
+
+        newValue = { fiterSetting };
         break;
 
       case "showFilter":
         const newShow = !show;
-        setDataFilter({
-          ...dataFilter,
-          columnsFilter: {
-            ...columnsFilter,
-            show: newShow,
-            filtered: !newShow ? {} : filtered,
-          },
-        });
+
+        newValue = {
+          columnsFilter: { ...columnsFilter, show: newShow },
+        };
         break;
 
       default:
-        setDataFilter({ ...dataFilter, ...data });
+        newValue = { ...data };
         break;
     }
+    newValue = { ...dataFilter, ...newValue };
+    let allFeatured = newValue.fiterSetting
+      .filter((item) => item.active)
+      .map((item) => item.filtered);
+
+    let val = {};
+    for (let i = 0; i < allFeatured.length; i++) {
+      val = { ...val, ...allFeatured[i] };
+    }
+
+    setDataFilter({ ...newValue, allFeatured: val });
+  };
+  const handleSettingChange = (options) => {
+    options && setDataFilter({ ...dataFilter, fiterSetting: options });
   };
 
   const filter = (
-    <Grid spacing={1} container justify="flex-start" direction="row">
-      <Grid item>
-        <FieldSorter updateValue={handleFilter("sorter")} />
-      </Grid>
-
-      {columns
-        .filter((item) => item.showed)
-        .map((column, index) => (
-          <Grid key={index} item>
-            <ColumnFilter
-              column={column}
-              updateValue={handleFilter("column")}
-            />
-          </Grid>
-        ))}
-
-      {addNew ? (
-        <Grid item>
-          <ColumnSelector
-            columns={columns.filter((item) => !item.showed)}
-            handleValidate={handleFilter("column")}
-          />
+    <Box display="flex" width="100%">
+      <Box flexGrow={1} width="170px">
+        <Grid spacing={1} container justify="flex-start" direction="row">
+          {fiterSetting
+            .filter((item) => item.active)
+            .map((item, index) =>
+              item.content({ index, addNew, handleFilter, columns })
+            )}
         </Grid>
-      ) : (
-        <Grid style={{ margin: "auto 12px" }} item>
-          <LinkButton onClick={handleFilter("addNew")}>
-            Ajouter un filtre de colonne
-          </LinkButton>
-        </Grid>
-      )}
-    </Grid>
+      </Box>
+      <Box>
+        <ConfigSetting
+          submitSelected={handleSettingChange}
+          actionButton={(handleClick) => (
+            <SettingsIconButton onClick={handleClick} />
+          )}
+          initOptions={fiterSetting}
+        />
+      </Box>
+    </Box>
   );
 
   return (
@@ -258,4 +267,78 @@ const searchInFields = [
   "content.sku",
   "content.id",
   "content.ugs",
+];
+
+const typeOfFilters = [
+  {
+    id: "sorter",
+    label: "Ordonner la liste par une colonne",
+    active: false,
+    filtered: {},
+    content: ({ index, handleFilter }) => (
+      <Grid key={index} item>
+        <FieldSorter updateValue={handleFilter("sorter")} />
+      </Grid>
+    ),
+  },
+  {
+    id: "column",
+    label: "Ajouter une filtre de colonne",
+    active: false,
+    filtered: {},
+    content: ({ handleFilter, columns, addNew }) => (
+      <>
+        {columns
+          .filter((item) => item.showed)
+          .map((column, index) => (
+            <Grid key={index} item>
+              <ColumnFilter
+                column={column}
+                updateValue={handleFilter("column")}
+              />
+            </Grid>
+          ))}
+        {addNew ? (
+          <Grid item>
+            <ColumnSelector
+              columns={columns.filter((item) => !item.showed)}
+              handleValidate={handleFilter("column")}
+            />
+          </Grid>
+        ) : (
+          <Grid style={{ margin: "auto 12px" }} item>
+            <LinkButton onClick={handleFilter("addNew")}>
+              Ajouter un filtre de colonne
+            </LinkButton>
+          </Grid>
+        )}
+      </>
+    ),
+  },
+  {
+    id: "updated",
+    label: "Visualiser les états de mise à jours",
+    active: false,
+    filtered: {},
+    content: ({ props }) => <Grid> item </Grid>,
+  },
+  {
+    id: "limit",
+    label: "Définir une limite des résultats affichés",
+    active: false,
+    filtered: {},
+    content: ({ index, handleFilter }) => (
+      <Grid key={index}>
+        <TextField
+          onChange={(event) => {
+            handleFilter("limit")(event.target.value);
+          }}
+          type="number"
+          margin="dense"
+          helperText="Limit des resultats"
+          defaultValue={1000}
+        />
+      </Grid>
+    ),
+  },
 ];

@@ -18,6 +18,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SaveIcon from "@material-ui/icons/Save";
 import CancelIcon from "@material-ui/icons/Cancel";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 const NextIconButton = ({ size = "small", ...props }) => (
   <IconButton
@@ -76,6 +77,16 @@ const EditIconButton = ({ size = "small", ...props }) => (
     {...props}
   >
     <EditIcon style={{ fontSize: size === "small" ? "1rem" : "1.3rem" }} />
+  </IconButton>
+);
+
+const SettingsIconButton = ({ size = "small", ...props }) => (
+  <IconButton
+    size={size}
+    style={{ padding: size === "small" ? "4px" : "8px" }}
+    {...props}
+  >
+    <SettingsIcon style={{ fontSize: size === "small" ? "1rem" : "1.3rem" }} />
   </IconButton>
 );
 
@@ -264,4 +275,5 @@ export {
   ButtonSimple,
   LinkButton,
   CancelIconButton,
+  SettingsIconButton,
 };

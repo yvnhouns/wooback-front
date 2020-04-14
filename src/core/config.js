@@ -9,7 +9,7 @@ import Intro from "./Intro";
 import DnsIcon from "@material-ui/icons/Dns";
 import Importer from "../Importer";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
-
+import CategoriesTree from "../Categories/components/TreeView";
 export const generalItems = [
   {
     id: 1,
@@ -62,10 +62,10 @@ export const generalItems = [
   },
   {
     id: 8,
-    title: "Commandes",
+    title: "Categories",
     path: routeLink.ADMIN_ORDERS_LINK,
     itemIcon: <ListAltIcon />,
-    content: (props) => <div>Order</div>, //<Order {...props} />,
+    content: (props) => <CategoriesTree />, //<Order {...props} />,
 
     // child: [
     //   {
