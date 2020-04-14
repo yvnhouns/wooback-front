@@ -261,13 +261,7 @@ const initColumns = [
   { id: "category", label: "Catégorie", values: [] },
 ];
 
-const searchInFields = [
-  "id",
-  "content.name",
-  "content.sku",
-  "content.id",
-  "content.ugs",
-];
+const searchInFields = ["id", "content.name"];
 
 const typeOfFilters = [
   {

@@ -41,7 +41,7 @@ const Tree = () => {
   };
 
   const renderTree = (nodes) => (
-    <TreeItem key={nodes.id} nodeId={nodes.id} label={nodes.fullName}>
+    <TreeItem key={nodes.id} nodeId={`${nodes.id}`} label={nodes.fullName}>
       {Array.isArray(nodes.children)
         ? nodes.children.map((node) => renderTree(node))
         : null}
@@ -55,6 +55,7 @@ const Tree = () => {
           disabled={category.children.length === 0}
           expanded={expanded === category.id}
           onChange={handleChange(category.id)}
+          key={category.id}
         >
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon />}
