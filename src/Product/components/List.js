@@ -32,7 +32,7 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    // refreshInterval: 4000,
+    refreshInterval: 4000,
   });
   const { results: posts, count } = data;
 

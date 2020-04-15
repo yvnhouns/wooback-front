@@ -100,7 +100,8 @@ const Dashboard = ({
     let newValue = {};
     switch (name) {
       case "search":
-        newValue = { [name]: data.target.value };
+        const val = data.target.value;
+        newValue = { [name]: val === "" ? undefined : val };
         break;
 
       case "column":
@@ -261,7 +262,7 @@ const initColumns = [
   { id: "category", label: "Catégorie", values: [] },
 ];
 
-const searchInFields = ["id", "content.name"];
+const searchInFields = ["id", "name"];
 
 const typeOfFilters = [
   {

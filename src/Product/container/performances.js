@@ -12,7 +12,6 @@ import { synchroneApi } from "../../Importer/container/api";
 import { API } from "../../config";
 import queryString from "query-string";
 import { fetcherWithToken } from "../../utils/fecthers";
-import { objectFromArray } from "../../utils";
 
 import { encodeProductsFields } from "./utils";
 

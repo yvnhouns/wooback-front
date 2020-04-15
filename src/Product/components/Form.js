@@ -1,9 +1,11 @@
-import React, { lazy } from "react";
+import React, { lazy, useState } from "react";
 import SuspensePaper from "../../components/SuspensePaper";
+import Suspenser from "../../components/Suspenser";
 import { TitleTypography } from "../../components/assets";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import SimpleSelctor from "../../components/SimpleSelectorMUI";
+import CheckBoxLine from "../../components/CheckBoxLine";
 
 import { FormSpy } from "react-final-form";
 import {
@@ -16,9 +18,14 @@ import Checkboxes from "../../components/CheckBoxLineMui";
 const CatgoriesFields = lazy(() =>
   import("../../Categories/components/CatgoriesSelectorMui")
 );
+
+const Description = lazy(() => import("./Description"));
+
 const Images = lazy(() => import("./ImagesLine"));
 
 const Form = ({ classes, categories, ...restProps }) => {
+  const [openDescription, setOpenDescritpion] = useState(false);
+
   return (
     <Grid
       container
@@ -35,22 +42,20 @@ const Form = ({ classes, categories, ...restProps }) => {
             name="name"
             label="Libeller"
           />
-          <SimpleTextField
-            placeholder="Description"
-            className={classes.textField}
-            name="description"
-            multiline
-            rows="5"
-            label="Description"
+
+          <CheckBoxLine
+            value={openDescription}
+            handleChange={() => {
+              setOpenDescritpion(!openDescription);
+            }}
+            label="Afficher les descriptions"
           />
-          <SimpleTextField
-            placeholder="Description complete"
-            className={classes.textField}
-            name="short_description"
-            multiline
-            rows="5"
-            label="Description complete"
-          />
+          <Divider />
+          {openDescription && (
+            <Suspenser count={2}>
+              <Description classes={classes} />
+            </Suspenser>
+          )}
         </SuspensePaper>
 
         <SuspensePaper>

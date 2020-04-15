@@ -31,7 +31,7 @@ const Tree = () => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
 
-  const { data, error } = useSWR(TREE_URL, {
+  const { data } = useSWR(TREE_URL, {
     initialData: [],
     suspense: true,
   });

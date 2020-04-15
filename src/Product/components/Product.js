@@ -13,6 +13,7 @@ import { readPostUrl } from "../container/urls";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { decodeFields } from "../container/utils";
 import Form from "./Form";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 const ProductForm = ({
   submitProduct,
@@ -27,21 +28,33 @@ const ProductForm = ({
   const [validateHandler, setValidateHandler] = useState({
     success: false,
     submiting: false,
+    refreshing: false,
+    post: { ...initialPost },
+    url: "",
   });
 
-  const url = readPostUrl(id);
+  const { success, submiting, refreshing, url, post } = validateHandler;
 
-  const {
-    data: { post },
-  } = useSWR(url, fetcher, {
-    initialData: { post: initialPost },
+  const handleRefresh = () => {
+    setValidateHandler({ ...validateHandler, url: readPostUrl(id) });
+  };
+
+  // eslint-disable-next-line no-unused-vars
+  const { data } = useSWR(url, fetcher, {
+    // initialData: { post: initialPost },
+    revalidateOnFocus: false,
     refreshWhenOffline: false,
-    dedupingInterval: 0,
-    suspense: true,
+    suspense: false,
+    onSuccess: (data) => {
+      setValidateHandler({
+        ...validateHandler,
+        post: data.post,
+        refreshing: false,
+      });
+    },
   });
 
   const classes = useStyles();
-
   const onSubmit = async (values, form) => {
     setValidateHandler({ submiting: true, success: false });
     const modified = form.getState().modified;
@@ -70,8 +83,6 @@ const ProductForm = ({
         nextStep({ data, operation });
       });
   };
-
-  const { success, submiting } = validateHandler;
 
   const contents = ({
     form: {
@@ -106,6 +117,7 @@ const ProductForm = ({
             classes={classes}
             modified={modified}
             submiting={submiting}
+            handleRefresh={handleRefresh}
             success={success}
           />
         </div>
@@ -115,6 +127,7 @@ const ProductForm = ({
 
   return (
     <>
+      {refreshing && <LinearProgress />}
       <FormValidator
         onSubmit={onSubmit}
         initialValues={format(post ? post.content : initialValue.content)}
@@ -128,7 +141,11 @@ const ProductForm = ({
   );
 };
 
-export default ProductForm;
+const isEqual = (prev, next) => {
+  return prev.id === next.id;
+};
+
+export default React.memo(ProductForm, isEqual);
 
 const useStyles = makeStyles((theme) => ({
   container: {
