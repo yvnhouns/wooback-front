@@ -71,7 +71,8 @@ const Routes = () => {
       <StateInspector name="App">
         <SWRConfig
           value={{
-            dedupingInterval: 5000,
+            dedupingInterval: 4000,
+            loadingTimeout: 5000,
             suspense: true,
             refreshWhenOffline: true,
             // refreshInterval: 5000,

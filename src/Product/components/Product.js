@@ -13,6 +13,7 @@ import { readPostUrl } from "../container/urls";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { decodeFields } from "../container/utils";
 import Form from "./Form";
+import FedBackdrop from "../../components/FedBackdrop";
 
 const ProductForm = ({
   submitProduct,
@@ -24,24 +25,47 @@ const ProductForm = ({
   nextStep,
   categories,
 }) => {
-  const url = readPostUrl(id);
-
   const [validateHandler, setValidateHandler] = useState({
     success: false,
     submiting: false,
+    refreshing: false,
+    post: { ...initialPost },
+    url: "",
+    refreshed: false,
   });
 
-  const { success, submiting } = validateHandler;
+  const {
+    success,
+    submiting,
+    refreshing,
+    url,
+    post,
+    refreshed,
+  } = validateHandler;
+
+  const handleRefresh = () => {
+    setValidateHandler({
+      ...validateHandler,
+      url: readPostUrl(id),
+      refreshing: true,
+    });
+  };
 
   // eslint-disable-next-line no-unused-vars
-  const { data, isValidating } = useSWR(url, fetcher, {
-    initialData: { post: JSON.stringify(initialPost) },
+  const { data, isValidating, error } = useSWR(url, fetcher, {
+    // initialData: { post: initialPost },
     revalidateOnFocus: false,
     refreshWhenOffline: false,
-    suspense: true,
+    // suspense: true,
+    onSuccess: (data) => {
+      setValidateHandler({
+        ...validateHandler,
+        post: JSON.parse(data.post),
+        refreshing: false,
+        refreshed: true,
+      });
+    },
   });
-
-  const post = JSON.parse(data.post);
 
   const classes = useStyles();
   const onSubmit = async (values, form) => {
@@ -99,7 +123,12 @@ const ProductForm = ({
           }}
         >
           <Suspenser height={100}>
-            <Form classes={classes} categories={categories} />
+            <Form
+              classes={classes}
+              categories={categories}
+              handleRefresh={handleRefresh}
+              refreshed={refreshed}
+            />
           </Suspenser>
           <ValidationButton
             form={form}
@@ -110,6 +139,7 @@ const ProductForm = ({
             classes={classes}
             modified={modified}
             submiting={submiting}
+            handleRefresh={handleRefresh}
             success={success}
           />
         </div>
@@ -119,6 +149,7 @@ const ProductForm = ({
 
   return (
     <>
+      {refreshing && <FedBackdrop />}
       <FormValidator
         onSubmit={onSubmit}
         initialValues={format(post ? post.content : initialValue.content)}

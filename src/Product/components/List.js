@@ -33,8 +33,8 @@ const ProductsList = ({
   const { checked, checkable } = checkData;
 
   const { data } = useSWR(url, fecther, {
-    // refreshInterval: 4000,
-    dedupingInterval: 5000,
+     refreshInterval: 5000,
+    // dedupingInterval: 2000,
     revalidateOnFocus: true,
   });
 
