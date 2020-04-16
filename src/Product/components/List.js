@@ -9,6 +9,7 @@ import { ButtonSimple } from "../../components/assets";
 import Suspenser from "../../components/Suspenser";
 import { LIST_URL as categoriesUrl } from "../../Categories/containers/constants";
 import LinearProgress from "@material-ui/core/LinearProgress";
+import ContextualMenu from "../../components/ContextualMenu";
 
 const Row = lazy(() => import("./Row"));
 const Product = lazy(() => import("./Product"));
@@ -31,16 +32,15 @@ const ProductsList = ({
   });
   const { checked, checkable } = checkData;
 
-  const { data, error } = useSWR(url, fecther, {
+  const { data } = useSWR(url, fecther, {
     // refreshInterval: 4000,
     dedupingInterval: 5000,
     revalidateOnFocus: true,
   });
 
-  console.log({ error });
   const { results, count } = data;
   const posts = JSON.parse(results);
-  
+
   const { data: catData } = useSWR(categoriesUrl, fecther, {
     initialData: { categories: [] },
   });
@@ -59,6 +59,13 @@ const ProductsList = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkable]);
 
+  const getRowMenu = (item) => [
+    {
+      label: "Voir le produit en live",
+      handleClick: () => window.open(item.permalink, "_blank"),
+    },
+  ];
+
   function rowRenderer({
     key, // Unique key within array of rows
     index, // Index of row within collection
@@ -69,13 +76,18 @@ const ProductsList = ({
   }) {
     const content = (
       <Suspenser height={80} doubleFeadBack={false}>
-        <Row
-          handleToggle={handleToggle}
-          checked={checked}
-          checkable={checkable}
-          post={posts[index]}
-          handleClick={() => handleClick(posts[index])}
-          isCurrent={current === posts[index].id}
+        <ContextualMenu
+          content={
+            <Row
+              handleToggle={handleToggle}
+              checked={checked}
+              checkable={checkable}
+              post={posts[index]}
+              handleClick={() => handleClick(posts[index])}
+              isCurrent={current === posts[index].id}
+            />
+          }
+          menus={getRowMenu(posts[index].content)}
         />
       </Suspenser>
     );

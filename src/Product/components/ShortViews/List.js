@@ -11,7 +11,7 @@ import DiscountPercentLabel from "../DiscountPercentLabel";
 import Title from "../ProductFullTitle";
 import SalePrice from "../SalePrice";
 import Divider from "@material-ui/core/Divider";
-import { SubLargeTypography,  } from "../../../components/Typography";
+import { SubLargeTypography } from "../../../components/Typography";
 const ItemList = ({ cart, removeItem }) => {
   const classes = useStyles();
   const { bags } = cart;
@@ -60,26 +60,26 @@ const ItemList = ({ cart, removeItem }) => {
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "auto",
     maxHeight: "300px",
     paddingRight: "16px",
-    overflowY: "auto"
+    overflowY: "auto",
   },
   inline: {
-    display: "inline"
+    display: "inline",
   },
   discount: {
-    marginRight: "auto"
+    marginRight: "auto",
     // textAlign: "center"
   },
   image: {
-    maxWidth: 55
+    maxWidth: 55,
   },
   secondaryItem: {
-    right: "0px"
-  }
+    right: "0px",
+  },
 }));
 
 const isEqual = (prev, next) => {

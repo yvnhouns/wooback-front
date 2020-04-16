@@ -1,11 +1,10 @@
-import React, { lazy, useState } from "react";
+import React, { lazy } from "react";
 import SuspensePaper from "../../components/SuspensePaper";
 import Suspenser from "../../components/Suspenser";
 import { TitleTypography } from "../../components/assets";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import SimpleSelctor from "../../components/SimpleSelectorMUI";
-import CheckBoxLine from "../../components/CheckBoxLine";
 
 import { FormSpy } from "react-final-form";
 import {
@@ -24,8 +23,6 @@ const Description = lazy(() => import("./Description"));
 const Images = lazy(() => import("./ImagesLine"));
 
 const Form = ({ classes, categories, ...restProps }) => {
-  const [openDescription, setOpenDescritpion] = useState(false);
-
   return (
     <Grid
       container
@@ -43,19 +40,9 @@ const Form = ({ classes, categories, ...restProps }) => {
             label="Libeller"
           />
 
-          <CheckBoxLine
-            value={openDescription}
-            handleChange={() => {
-              setOpenDescritpion(!openDescription);
-            }}
-            label="Afficher les descriptions"
-          />
-          <Divider />
-          {openDescription && (
-            <Suspenser count={2}>
-              <Description classes={classes} />
-            </Suspenser>
-          )}
+          <Suspenser count={2}>
+            <Description classes={classes} />
+          </Suspenser>
         </SuspensePaper>
 
         <SuspensePaper>

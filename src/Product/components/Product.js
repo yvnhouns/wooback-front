@@ -13,7 +13,6 @@ import { readPostUrl } from "../container/urls";
 import Skeleton from "@material-ui/lab/Skeleton";
 import { decodeFields } from "../container/utils";
 import Form from "./Form";
-import LinearProgress from "@material-ui/core/LinearProgress";
 
 const ProductForm = ({
   submitProduct,
@@ -25,34 +24,24 @@ const ProductForm = ({
   nextStep,
   categories,
 }) => {
+  const url = readPostUrl(id);
+
   const [validateHandler, setValidateHandler] = useState({
     success: false,
     submiting: false,
-    refreshing: false,
-    post: { ...initialPost },
-    url: "",
   });
 
-  const { success, submiting, refreshing, url, post } = validateHandler;
-
-  const handleRefresh = () => {
-    setValidateHandler({ ...validateHandler, url: readPostUrl(id) });
-  };
+  const { success, submiting } = validateHandler;
 
   // eslint-disable-next-line no-unused-vars
-  const { data } = useSWR(url, fetcher, {
-    // initialData: { post: initialPost },
+  const { data, isValidating } = useSWR(url, fetcher, {
+    initialData: { post: JSON.stringify(initialPost) },
     revalidateOnFocus: false,
     refreshWhenOffline: false,
-    suspense: false,
-    onSuccess: (data) => {
-      setValidateHandler({
-        ...validateHandler,
-        post: data.post,
-        refreshing: false,
-      });
-    },
+    suspense: true,
   });
+
+  const post = JSON.parse(data.post);
 
   const classes = useStyles();
   const onSubmit = async (values, form) => {
@@ -121,7 +110,6 @@ const ProductForm = ({
             classes={classes}
             modified={modified}
             submiting={submiting}
-            handleRefresh={handleRefresh}
             success={success}
           />
         </div>
@@ -131,7 +119,6 @@ const ProductForm = ({
 
   return (
     <>
-      {refreshing && <LinearProgress />}
       <FormValidator
         onSubmit={onSubmit}
         initialValues={format(post ? post.content : initialValue.content)}

@@ -2,7 +2,6 @@
 
 import {
   createPostApi,
-  importPostsApi,
   wooUpdateProductApi,
   updatePostApi,
   wooUpdateManyProductsApi,

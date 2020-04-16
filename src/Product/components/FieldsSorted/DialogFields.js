@@ -26,7 +26,6 @@ const FieldsDialog = ({ submitSelected, actionButton }) => {
   };
   const handleSubmit = (val) => {
     // submitSelected(val);
-    console.log({ val });
     setOpen(false);
   };
 
