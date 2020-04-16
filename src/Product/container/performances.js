@@ -31,7 +31,7 @@ const performances = (dispatch, auth) => {
 
     updatePostApi(user._id, token, { ...post, content }).then((data) => {
       checkErrorData(data, next, async () => {
-        next({ success: true, data: data.post });
+        next({ success: true, data: JSON.parse(data.post) });
       });
     });
   };
@@ -43,7 +43,6 @@ const performances = (dispatch, auth) => {
     await wooUpdateProductApi({ body, id })
       .then(async (response) => {
         if (response !== undefined) {
-          console.log({ response });
           await updateProduct({ _id, content: response.data }, ({ error }) => {
             error && console.log({ "vvvvv": { _id, error } });
           });
@@ -56,16 +55,6 @@ const performances = (dispatch, auth) => {
         next({ error });
         console.log({ "mmmmmm": { _id, err, auth } });
       });
-  };
-
-  const importLists = (posts, next) => {
-    const { user, token } = auth;
-    importPostsApi(user._id, token, posts).then((data) => {
-      checkErrorData(data, next, async () => {
-        const { duplicatedIds, duplicatedNames, posts } = data;
-        next({ success: true, duplicatedIds, duplicatedNames, data: posts });
-      });
-    });
   };
 
   const getProductsListSearchFilterUrl = (searchData) => {
@@ -132,7 +121,6 @@ const performances = (dispatch, auth) => {
     getProductsListSearchFilterUrl,
     getProductsListPartialSearchFilterUrl,
     getFecther,
-    importLists,
     wooUpdateProduct,
     getProductsCategoriesUrl,
     wooUpdateManyProducts,

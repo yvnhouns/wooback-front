@@ -56,7 +56,7 @@ const ProductForm = ({
 
   const classes = useStyles();
   const onSubmit = async (values, form) => {
-    setValidateHandler({ submiting: true, success: false });
+    setValidateHandler({ ...validateHandler, submiting: true, success: false });
     const modified = form.getState().modified;
     const operation = newProduct ? "create" : "update";
     const data = {};
@@ -79,7 +79,11 @@ const ProductForm = ({
     };
     submitProduct &&
       submitProduct(operation, formdData, (data) => {
-        setValidateHandler({ submiting: false, success: true });
+        setValidateHandler({
+          ...validateHandler,
+          submiting: false,
+          success: true,
+        });
         nextStep({ data, operation });
       });
   };
@@ -192,8 +196,8 @@ const initialValue = {
     manage_stock: true,
     stock_quantity: "",
     regular_price: "",
-    categories: "",
-    images: "",
+    categories: [],
+    images: [],
     type: "",
     sale_price: "",
     status: "publish",

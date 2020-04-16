@@ -60,14 +60,16 @@ const Form = ({ classes, categories, ...restProps }) => {
 
         <SuspensePaper>
           <FormSpy subscription={{ values: true }}>
-            {({ values }) => (
-              <CatgoriesFields
-                classes={classes}
-                className={classes.TextField}
-                sourceCategories={categories}
-                selectedValues={values.categories || []}
-              />
-            )}
+            {({ values }) => {
+              return (
+                <CatgoriesFields
+                  classes={classes}
+                  className={classes.TextField}
+                  sourceCategories={categories}
+                  selectedValues={values.categories || []}
+                />
+              );
+            }}
           </FormSpy>
         </SuspensePaper>
 

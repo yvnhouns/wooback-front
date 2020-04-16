@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, useState, Suspense } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR, { mutate, trigger } from "swr";
 import { TitleTypography } from "../../components/assets";
 import { List, AutoSizer } from "react-virtualized";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,11 +31,16 @@ const ProductsList = ({
   });
   const { checked, checkable } = checkData;
 
-  const { data } = useSWR(url, fecther, {
-    refreshInterval: 4000,
+  const { data, error } = useSWR(url, fecther, {
+    // refreshInterval: 4000,
+    dedupingInterval: 5000,
+    revalidateOnFocus: true,
   });
-  const { results: posts, count } = data;
 
+  console.log({ error });
+  const { results, count } = data;
+  const posts = JSON.parse(results);
+  
   const { data: catData } = useSWR(categoriesUrl, fecther, {
     initialData: { categories: [] },
   });
@@ -105,6 +110,7 @@ const ProductsList = ({
       const index = posts.findIndex((v) => v._id === data._id);
       if (index !== -1) {
         posts[index] = data;
+        trigger(url);
         // mutate(url, { ...data, results: posts });
       }
     }

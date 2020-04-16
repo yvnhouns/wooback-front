@@ -11,7 +11,7 @@ import TreeItem from "@material-ui/lab/TreeItem";
 import useSWR from "swr";
 import { TREE_URL } from "../containers/constants";
 import Suspenser from "../../components/Suspenser";
-
+import { test } from "../containers/api";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -36,6 +36,7 @@ const Tree = () => {
     suspense: true,
   });
 
+  test();
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
