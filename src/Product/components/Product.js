@@ -7,11 +7,10 @@ import FormValidator, {
   defaultSuscriptioin,
 } from "../../components/FormValidator";
 import Suspenser from "../../components/Suspenser";
-import ValidationButton from "./ValidationButton";
+import ValidationButton from "../../components/ValidationButton";
 import useSWR from "swr";
 import { readPostUrl } from "../container/urls";
 import Skeleton from "@material-ui/lab/Skeleton";
-import { decodeFields } from "../container/utils";
 import Form from "./Form";
 import FedBackdrop from "../../components/FedBackdrop";
 
@@ -244,7 +243,7 @@ const format = (item) => {
       item.manage_stock === null || item.manage_stock === ""
         ? true
         : item.manage_stock,
-    ...decodeFields(item),
+    ...item,
   };
 };
 

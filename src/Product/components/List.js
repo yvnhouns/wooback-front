@@ -1,5 +1,5 @@
 import React, { useEffect, lazy, useState, Suspense } from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR, { mutate } from "swr";
 import { TitleTypography } from "../../components/assets";
 import { List, AutoSizer } from "react-virtualized";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,6 +10,8 @@ import Suspenser from "../../components/Suspenser";
 import { LIST_URL as categoriesUrl } from "../../Categories/containers/constants";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import ContextualMenu from "../../components/ContextualMenu";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const Row = lazy(() => import("./Row"));
 const Product = lazy(() => import("./Product"));
@@ -19,9 +21,12 @@ const ProductsList = ({
   setCurrentViewerTitleAndAction,
   previous,
   url,
-  fecther,
+  fetcher,
   ...restProps
 }) => {
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down("xs"));
+
   const classes = useStyles();
   const [current, setCurrent] = useState("");
   const listRef = React.createRef();
@@ -32,16 +37,15 @@ const ProductsList = ({
   });
   const { checked, checkable } = checkData;
 
-  const { data } = useSWR(url, fecther, {
-     refreshInterval: 5000,
-    // dedupingInterval: 2000,
+  const {
+    data: { results: posts, count },
+  } = useSWR(url, fetcher, {
+    refreshInterval: 7000,
+    dedupingInterval: 4000,
     revalidateOnFocus: true,
   });
 
-  const { results, count } = data;
-  const posts = JSON.parse(results);
-
-  const { data: catData } = useSWR(categoriesUrl, fecther, {
+  const { data: catData } = useSWR(categoriesUrl, fetcher, {
     initialData: { categories: [] },
   });
 
@@ -122,8 +126,7 @@ const ProductsList = ({
       const index = posts.findIndex((v) => v._id === data._id);
       if (index !== -1) {
         posts[index] = data;
-        trigger(url);
-        // mutate(url, { ...data, results: posts });
+        mutate(url, { results: posts, count }, false);
       }
     }
   };
@@ -137,7 +140,7 @@ const ProductsList = ({
           id={item ? item._id : undefined}
           submitProduct={submitProduct}
           newProduct={item === undefined}
-          fecther={fecther}
+          fetcher={fetcher}
           initialPost={item}
           categories={catData}
           nextStep={handleClickNextStep}
@@ -161,7 +164,7 @@ const ProductsList = ({
                       width={width}
                       height={height}
                       rowCount={posts.length}
-                      rowHeight={80}
+                      rowHeight={mobile ? 150 : 90}
                       rowRenderer={rowRenderer}
                     />
                   </>

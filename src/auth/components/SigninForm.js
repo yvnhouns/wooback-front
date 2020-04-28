@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useState } from "reinspect";
-import FedBackdrop from "../../components/FedBackdrop";
+// import FedBackdrop from "../../components/FedBackdrop";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 import {
   TextField,
   InputAdornment,
@@ -8,7 +10,7 @@ import {
   Button,
   Typography,
   Grid,
-  Link
+  Link,
 } from "@material-ui/core";
 import { Visibility } from "@material-ui/icons";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -27,11 +29,11 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
     password: "",
     error: "",
     loading: false,
-    redirectToReferrer: false
+    redirectToReferrer: false,
   };
   const [values, setValues] = useState({
     ...dataInit,
-    loading: false
+    loading: false,
   });
 
   useEffect(() => {
@@ -39,34 +41,32 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signinError]);
 
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setValues({
       ...values,
       error: false,
       loading: false,
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
   const { email, password, error, loading } = values;
 
-  const clickSubmit = event => {
+  const clickSubmit = async (event) => {
     event.preventDefault();
     setValues({ ...values, error: false, loading: true });
-    const user = {
-      email,
-      password
-    };
+    const user = { email, password };
 
-    signin(user, ({ error, success }) => {
-      console.log({ error });
+    await signin(user, (data) => {
+      const { error } = data;
       error && setValues({ ...values, error: error, loading: false });
-      if (success) {
+      if (!error) {
         openInDialog && props.closeDialog();
         props.nextStep && props.nextStep();
       }
     });
   };
+
   const showError = () => {
     return error ? (
       <Typography variant="subtitle2" color="secondary">
@@ -77,12 +77,12 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
     );
   };
 
-  const showLoading = () => <FedBackdrop open={loading} />;
+  const showLoading = () => loading && <LinearProgress />;
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
   const signinForm = (
@@ -139,7 +139,7 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
               <InputAdornment position="start">
                 <MailIcon />
               </InputAdornment>
-            )
+            ),
           }}
         />
 
@@ -169,7 +169,7 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
                   {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
-            )
+            ),
           }}
         />
 
@@ -219,21 +219,21 @@ const SigninForm = ({ openInDialog, signin, signinError, ...props }) => {
 
 export default SigninForm;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexWrap: "wrap",
-    textAlign: "center"
+    textAlign: "center",
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
+    backgroundColor: theme.palette.secondary.main,
   },
   button: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   textField: {
-    margin: theme.spacing(1, 0)
+    margin: theme.spacing(1, 0),
   },
   paper: {
     maxWidth: "500px",
@@ -241,17 +241,17 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(5, 3),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(3, 0, 2),
   },
   fbk: {
     backgroundImage:
-      "url(https://img.icons8.com/material/24/ffffff/facebook-f.png)"
+      "url(https://img.icons8.com/material/24/ffffff/facebook-f.png)",
   },
   fbkButton: {
     backgroundColor: "#164675",
-    marginTop: theme.spacing(1)
-  }
+    marginTop: theme.spacing(1),
+  },
 }));

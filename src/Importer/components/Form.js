@@ -46,7 +46,7 @@ const Form = ({
         <NumberTextField
           className={classes.textField}
           name="per_page"
-          label={`Nombre de ${values.collection} par bande`}
+          label={`Nombre de ${values.collection} par requète`}
           type="number"
         />
       </Grid>
@@ -54,7 +54,7 @@ const Form = ({
         <NumberTextField
           className={classes.textField}
           name="page_count"
-          label="Nombre de bande"
+          label="Nombre de requète"
           type="number"
         />
       </Grid>

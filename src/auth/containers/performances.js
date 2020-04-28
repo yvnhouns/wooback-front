@@ -1,21 +1,29 @@
 import actions from "./actions";
 import { signupApi, signinApi, signoutApi } from "./api";
+import { API } from "../../config";
+import { fetcherWithToken } from "../../utils/fecthers";
+
 const authPerformances = (dispatch) => {
-  
   const signin = async (user, next) => {
     signinApi(user).then(async (data) => {
-      checkErrorData(data, next, async () => {
-        await dispatch(actions.signinAction(data));
-        next({ success: true });
+      await checkErrorData(data, next, async () => {
+        !data.error &&
+          authenticate(data, async () => {
+            await dispatch(actions.signinAction(data));
+            next(data);
+          });
       });
     });
   };
 
-  const signup = (user, next) => {
+  const signup = async (user, next) => {
     signupApi(user).then(async (data) => {
-      checkErrorData(data, next, async () => {
-        await dispatch(actions.signUpAction(data));
-        !data.error && next();
+      await checkErrorData(data, next, async () => {
+        !data.error &&
+          authenticate(data, async () => {
+            await dispatch(actions.signUpAction(data));
+            next(data);
+          });
       });
     });
   };
@@ -23,9 +31,19 @@ const authPerformances = (dispatch) => {
   const authenticate = async (data, next) => {
     if (typeof window !== undefined) {
       localStorage.setItem("jwt", JSON.stringify(data));
-
-      await dispatch(actions.authenticateAction(...data));
       next();
+    }
+  };
+
+  // si il y a une erreur il déconnecte tous les clients du meme user
+  const setUserInfo = async (data, auth) => {
+    if (data) {
+      let result = { ...auth, user: data };
+      if (data.error) {
+        await authOut();
+        result = false;
+      }
+      await dispatch(actions.setUserInfoAction(result));
     }
   };
 
@@ -40,10 +58,12 @@ const authPerformances = (dispatch) => {
   const signout = (auth, next) => {
     auth &&
       signoutApi(auth.user._id).then(async (data) => {
+        await authOut();
+        next && next();
         dispatch(actions.signoutAction(data));
-        next();
       });
   };
+
   const setAdminMode = (mode) => {
     dispatch(actions.setAdminModeAction(mode));
   };
@@ -52,17 +72,45 @@ const authPerformances = (dispatch) => {
     dispatch(actions.setsetSessionIdAction(session));
   };
 
+  const getUserInfoUrl = (auth) => {
+    const { user = {} } = auth;
+    return () => (auth ? `${API}/user/info/${user._id}` : null);
+  };
+
+  const getFetcher = (auth) => {
+    const { token } = auth;
+    const fetcher = (link) => fetcherWithToken(link, token);
+    return fetcher;
+  };
+  const authOut = async () => {
+    if (typeof window !== undefined) {
+      await localStorage.removeItem("jwt");
+    }
+  };
+
+  const isAuthenticated = () => {
+    if (typeof window === undefined) return false;
+    if (localStorage.getItem("jwt")) {
+      return JSON.parse(localStorage.getItem("jwt"));
+    }
+    return false;
+  };
+
   return {
     signin,
     signup,
-    authenticate,
     signout,
     setOpenSigninDialog,
     setOpenSignupDialog,
     setAdminMode,
     setsetSessionId,
+    getUserInfoUrl,
+    getFetcher,
+    setUserInfo,
+    isAuthenticated,
   };
 };
+export default authPerformances;
 
 const checkErrorData = (data, sendError, next) => {
   if (data === undefined || (data && data.error)) {
@@ -72,4 +120,3 @@ const checkErrorData = (data, sendError, next) => {
     next();
   }
 };
-export default authPerformances;

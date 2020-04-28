@@ -1,4 +1,4 @@
-import React, {  useContext, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 //  import { Debug } from "mui-rff";
 import Grid from "@material-ui/core/Grid";
@@ -81,27 +81,6 @@ const Importer = ({
 
   return (
     <Grid spacing={2} container>
-      <Grid
-        container
-        direction="column"
-        justify="flex-start"
-        alignItems="center"
-        item
-        sm={6}
-        xs={12}
-      >
-        {count > 0 ? (
-          <>
-            {percent !== 100 && (
-              <Paper className={classes.current}>{current}</Paper>
-            )}
-            <Paper className={classes.completed}> {completed}</Paper>
-          </>
-        ) : (
-          <Paper className={classes.paper}></Paper>
-        )}
-      </Grid>
-
       <Grid container item sm={6} xs={12}>
         <SuspensePaper>
           <Form
@@ -121,6 +100,27 @@ const Importer = ({
             </>
           )}
         </Paper>
+      </Grid>
+
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        alignItems="center"
+        item
+        sm={6}
+        xs={12}
+      >
+        {count > 0 ? (
+          <>
+            {percent !== 100 && (
+              <Paper className={classes.current}>{current}</Paper>
+            )}
+            <Paper className={classes.completed}> {completed}</Paper>
+          </>
+        ) : (
+          <Paper className={classes.paper}></Paper>
+        )}
       </Grid>
     </Grid>
   );

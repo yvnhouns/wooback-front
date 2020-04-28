@@ -11,26 +11,31 @@ export default ({ setCurrentViewTitle, ...props }) => {
   const classes = useStyles();
   const { isAuthenticatedUser, signout } = useContext(context).auth;
 
+  !isAuthenticatedUser && history.push("/");
   return (
-    <Paper className={classes.paper}>
-      <Typography variant="subtitle1">
-        Désolé ! Vous ne pouvez pas accéder à la page demandée.
-        <br />
-        <Link
-          onClick={() => signout(isAuthenticatedUser, () => history.push("/"))}
-          variant="subtitle1"
-          component="button"
-        >
-          <strong>Déconnexion</strong>
-        </Link>
-      </Typography>
-    </Paper>
+    isAuthenticatedUser && (
+      <Paper className={classes.paper}>
+        <Typography variant="subtitle1">
+          Désolé ! Vous ne pouvez pas accéder à la page demandée.
+          <br />
+          <Link
+            onClick={() =>
+              signout(isAuthenticatedUser, () => history.push("/"))
+            }
+            variant="subtitle1"
+            component="button"
+          >
+            <strong>Déconnexion</strong>
+          </Link>
+        </Typography>
+      </Paper>
+    )
   );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     // height: "100%",
-    padding: theme.spacing(2, 4)
-  }
+    padding: theme.spacing(2, 4),
+  },
 }));

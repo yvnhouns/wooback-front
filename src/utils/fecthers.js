@@ -1,7 +1,7 @@
 //import fetch from "isomorphic-unfetch";
 
-export const fetcher = async url => {
-  return fetch(url).then(res => res.json());
+export const fetcher = async (url) => {
+  return fetch(url).then((res) => res.json());
 };
 
 export const fetcherWithToken = async (url, token) => {
@@ -9,19 +9,19 @@ export const fetcherWithToken = async (url, token) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    }
-  }).then(res => res.json());
+      Authorization: `Bearer ${token}`,
+    },
+  }).then((res) => res.json());
 };
 
 export const fetcherWithBody = async (url, body) => {
   return fetch(url, {
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
-    }
+      "Content-Type": "application/json",
+    },
     // body: JSON.stringify(body)
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const fetcherWithTokenAnBody = async (url, token, body) => {
@@ -29,10 +29,10 @@ export const fetcherWithTokenAnBody = async (url, token, body) => {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body)
-  }).then(res => res.json());
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
 };
 
 export const wooFetcher = async (breackpoint, params, body) => {
@@ -49,6 +49,6 @@ export const wooFetcher = async (breackpoint, params, body) => {
   return fetch(url, {
     ethod: "GET",
     headers: new Headers(),
-    body: JSON.stringify(body)
-  }).then(res => res.json());
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
 };

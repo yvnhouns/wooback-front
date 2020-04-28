@@ -1,10 +1,7 @@
 import actions from "./actions";
 import { synchroneApi, wooFecth } from "./api";
 import { wooApiEndpoints } from "./constants";
-import {
-  encodeProductsFields,
-  convertNumberFieds,
-} from "../../Product/container/utils";
+import { convertNumberFieds } from "../../Product/container/utils";
 
 const performances = (dispatch, auth) => {
   const submitSetting = (setting) => {
@@ -16,7 +13,7 @@ const performances = (dispatch, auth) => {
   };
 
   const synchronePost = async (page, posts, endpoint) => {
-    const values = await convertNumberFieds(encodeProductsFields(posts, true));
+    const values = await convertNumberFieds(posts);
     const { user, token } = auth;
     synchroneApi(user._id, token, values, endpoint).then((data) => {
       checkErrorData(

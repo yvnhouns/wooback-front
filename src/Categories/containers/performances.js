@@ -12,7 +12,7 @@ const performances = (dispatch, auth) => {
     });
   };
 
-  const getFecther = () => {
+  const getFetcher = () => {
     const { token } = auth;
     const fetcher = (link) => fetcherWithToken(link, token);
     return fetcher;
@@ -25,7 +25,7 @@ const performances = (dispatch, auth) => {
 
   return {
     createCategory,
-    getFecther,
+    getFetcher,
     getProductsCategoriesUrl,
   };
 };

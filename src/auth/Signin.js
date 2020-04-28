@@ -6,14 +6,12 @@ import { useHistory, useLocation, Redirect } from "react-router";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
-import { isAuthenticated } from "./index";
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     maxWidth: "345px",
     margin: "auto",
-    padding: theme.spacing(1, 2)
-  }
+    padding: theme.spacing(1, 2),
+  },
 }));
 
 const Signin = () => {
@@ -21,9 +19,9 @@ const Signin = () => {
   let location = useLocation();
   let history = useHistory();
 
-  const { signin, signinError } = useContext(context).auth;
+  const { signin, signinError, isAuthenticated } = useContext(context).auth;
 
-  const nextStep = async => {
+  const nextStep = (async) => {
     location.state !== undefined
       ? history.push(location.state.from.pathname)
       : history.push("/");

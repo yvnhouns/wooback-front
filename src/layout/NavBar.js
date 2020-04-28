@@ -30,11 +30,12 @@ const PrimarySearchAppBar = () => {
     currentViewerAction,
     index,
     previous,
-    initializeViewer
+    initializeViewer,
   } = adminContext.layout;
 
   const { signout, isAuthenticatedUser } = adminContext.auth;
 
+  
   // handle
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -62,7 +63,7 @@ const PrimarySearchAppBar = () => {
           onClick={handleDrawerOpen}
           edge="start"
           className={clsx(classes.menuButton, {
-            [classes.hide]: open
+            [classes.hide]: open,
           })}
         >
           <MenuIcon />
@@ -83,9 +84,9 @@ const PrimarySearchAppBar = () => {
     <>
       <AppBar
         position="fixed"
-        color="inherit"
+        // color="inherit"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open
+          [classes.appBarShift]: open,
         })}
       >
         <Toolbar>{adminHeader}</Toolbar>
@@ -93,6 +94,7 @@ const PrimarySearchAppBar = () => {
 
       <AdminDashboardMenu
         signout={getout}
+        user={isAuthenticatedUser.user}
         open={open}
         setOpen={setOpen}
         classes={classes}
@@ -103,84 +105,84 @@ const PrimarySearchAppBar = () => {
 
 export default PrimarySearchAppBar;
 
-const useStyles = makeStyles(theme => {
+const useStyles = makeStyles((theme) => {
   return {
     root: {
-      display: "flex"
+      display: "flex",
     },
     appBar: {
       zIndex: theme.zIndex.drawer + 1,
       transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-      })
+        duration: theme.transitions.duration.leavingScreen,
+      }),
     },
     appBarShift: {
       marginLeft: drawerWidth,
       width: `calc(100% - ${drawerWidth}px)`,
       transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
     menuButton: {
       [theme.breakpoints.up("sm")]: {
-        marginRight: "36px"
-      }
+        marginRight: "36px",
+      },
     },
     hide: {
-      display: "none"
+      display: "none",
     },
     drawer: {
       width: drawerWidth,
       flexShrink: 0,
-      whiteSpace: "nowrap"
+      whiteSpace: "nowrap",
     },
     drawerOpen: {
       width: drawerWidth,
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-      })
+        duration: theme.transitions.duration.enteringScreen,
+      }),
     },
     drawerClose: {
       transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
+        duration: theme.transitions.duration.leavingScreen,
       }),
       overflowX: "hidden",
       width: theme.spacing(0),
       [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9) + 1
-      }
+        width: theme.spacing(9) + 1,
+      },
     },
     toolbar: {
       display: "flex",
       alignItems: "center",
       justifyContent: "flex-end",
       padding: theme.spacing(0, 1),
-      ...theme.mixins.toolbar
+      ...theme.mixins.toolbar,
     },
     grow: {
-      flexGrow: 1
+      flexGrow: 1,
     },
 
     button: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
     },
 
     title: {
       // display: "none",
       [theme.breakpoints.up("sm")]: {
-        display: "block"
-      }
+        display: "block",
+      },
     },
     search: {
       position: "relative",
       borderRadius: theme.shape.borderRadius,
       backgroundColor: fade(theme.palette.common.black, 0.08),
       "&:hover": {
-        backgroundColor: fade(theme.palette.common.black, 0.04)
+        backgroundColor: fade(theme.palette.common.black, 0.04),
       },
 
       marginRight: theme.spacing(2),
@@ -188,11 +190,11 @@ const useStyles = makeStyles(theme => {
       width: "100%",
       [theme.breakpoints.up("sm")]: {
         marginLeft: theme.spacing(3),
-        width: "auto"
-      }
+        width: "auto",
+      },
     },
     leftIcon: {
-      marginRight: theme.spacing(1)
+      marginRight: theme.spacing(1),
     },
     searchIcon: {
       width: theme.spacing(7),
@@ -204,11 +206,11 @@ const useStyles = makeStyles(theme => {
       justifyContent: "center",
       transition: theme.transitions.create("right"),
       "&:hover": {
-        right: "opx"
-      }
+        right: "opx",
+      },
     },
     inputRoot: {
-      color: "inherit"
+      color: "inherit",
     },
     inputInput: {
       padding: theme.spacing(1, 1, 1, 7),
@@ -217,21 +219,21 @@ const useStyles = makeStyles(theme => {
       [theme.breakpoints.up("md")]: {
         width: 200,
         "&:focus": {
-          width: 400
-        }
-      }
+          width: 400,
+        },
+      },
     },
     sectionDesktop: {
       display: "none",
       [theme.breakpoints.up("md")]: {
-        display: "flex"
-      }
+        display: "flex",
+      },
     },
     sectionMobile: {
       display: "flex",
       [theme.breakpoints.up("md")]: {
-        display: "none"
-      }
-    }
+        display: "none",
+      },
+    },
   };
 });

@@ -14,8 +14,16 @@ const Alert = () => {
 
   return (
     <>
-      <Notifier notificationType="success" message={success} nextClose={next} />
-      <Notifier notificationType="error" message={error} nextClose={next} />
+      <Notifier
+        notificationType="success"
+        message={typeof success !== "object" ? success : "succès"}
+        nextClose={next}
+      />
+      <Notifier
+        notificationType="error"
+        message={typeof error !== "object" ? error : "error"}
+        nextClose={next}
+      />
     </>
   );
 };

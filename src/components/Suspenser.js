@@ -7,7 +7,7 @@ const Suspenser = ({
   fallback,
   height = 200,
   count = 1,
-  doubleFeadBack = true
+  doubleFeadBack = false
 }) => {
   const classes = useStylesPaper();
   const load = fallback ? (
@@ -51,7 +51,7 @@ const SuspenserDiv = ({ children, fallback, height = 200, count = 1 }) => {
   );
 };
 
-const defaultFeadBack = (classes, item, height, doubleFeadBack = true) => (
+const defaultFeadBack = (classes, item, height, doubleFeadBack = false) => (
   <>
     {doubleFeadBack ? (
       <div key={item}>

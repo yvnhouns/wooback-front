@@ -5,15 +5,18 @@ import { removeUndefined } from "../../utils";
 import ProductsList from "./List";
 import SearchField from "../../components/SearchField";
 import { LinkButton } from "../../components/LinkButton";
-import { SettingsIconButton } from "../../components/Buttons";
+import SettingsIcon from "@material-ui/icons/Settings";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
+import Divider from "@material-ui/core/Divider";
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import ColumnSelector from "./ColumnSelector";
 import ColumnFilter from "./ColumnFilter";
 import FieldSorter from "./FieldSorter";
 import ConfigSetting from "./FilterSetting/Dialog";
+
 const Dashboard = ({
   setCurrentViewTitle,
   setCurrentViewAction,
@@ -24,7 +27,7 @@ const Dashboard = ({
   previous,
 }) => {
   const {
-    getFecther,
+    getFetcher,
     createProduct,
     wooUpdateProduct,
     // getProductsListSearchFilterUrl,
@@ -50,7 +53,7 @@ const Dashboard = ({
   });
 
   let categoriesUrl = getProductsCategoriesUrl();
-  const fetcher = getFecther();
+  const fetcher = getFetcher();
 
   /** Manage Product */
   const add = (values, next) => {
@@ -173,26 +176,30 @@ const Dashboard = ({
   };
 
   const filter = (
-    <Box display="flex" width="100%">
-      <Box flexGrow={1} width="170px">
-        <Grid spacing={1} container justify="flex-start" direction="row">
-          {fiterSetting
-            .filter((item) => item.active)
-            .map((item, index) =>
-              item.content({ index, addNew, handleFilter, columns })
+    <>
+      <Box display="flex" width="100%" pl={2} pr={2}>
+        <Box flexGrow={1} width="170px">
+          <Grid spacing={1} container justify="flex-start" direction="row">
+            {fiterSetting
+              .filter((item) => item.active)
+              .map((item, index) =>
+                item.content({ index, addNew, handleFilter, columns })
+              )}
+          </Grid>
+        </Box>
+        <Box>
+          <ConfigSetting
+            submitSelected={handleSettingChange}
+            actionButton={(handleClick) => (
+              <SettingButton onClick={handleClick} />
             )}
-        </Grid>
+            initOptions={fiterSetting}
+          />
+        </Box>
       </Box>
-      <Box>
-        <ConfigSetting
-          submitSelected={handleSettingChange}
-          actionButton={(handleClick) => (
-            <SettingsIconButton onClick={handleClick} />
-          )}
-          initOptions={fiterSetting}
-        />
-      </Box>
-    </Box>
+
+      <Divider style={{ margin: "6px 0px" }} />
+    </>
   );
 
   return (
@@ -278,11 +285,11 @@ const typeOfFilters = [
   },
   {
     id: "column",
-    label: "Ajouter une filtre de colonne",
+    label: "Ajouter un filtre de colonne",
     active: false,
     filtered: {},
-    content: ({ handleFilter, columns, addNew }) => (
-      <>
+    content: ({ handleFilter, index, columns, addNew }) => (
+      <div key={index} style={{ display: "inline-flex" }}>
         {columns
           .filter((item) => item.showed)
           .map((column, index) => (
@@ -307,7 +314,7 @@ const typeOfFilters = [
             </LinkButton>
           </Grid>
         )}
-      </>
+      </div>
     ),
   },
   {
@@ -315,7 +322,7 @@ const typeOfFilters = [
     label: "Visualiser les états de mise à jours",
     active: false,
     filtered: {},
-    content: ({ props }) => <Grid> item </Grid>,
+    content: ({ index, props }) => <Grid key={index}> item </Grid>,
   },
   {
     id: "limit",
@@ -337,3 +344,15 @@ const typeOfFilters = [
     ),
   },
 ];
+
+const SettingButton = (props) => (
+  <Button
+    variant="outlined"
+    color="primary"
+    size="small"
+    startIcon={<SettingsIcon />}
+    {...props}
+  >
+    filtres
+  </Button>
+);

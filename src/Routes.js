@@ -13,7 +13,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Alert from "./Alert";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
-import AdminRoute from "./auth/utils/AdminRoute";
+import AdminRoute from "./auth/utils/AuthRoute";
+// import UserInfoListne from "./auth/Listner";
+
 import Signup from "./auth/Signup";
 import Signin from "./auth/Signin";
 import { fetcherWithBody as fetcher } from "./utils/fecthers";
@@ -73,14 +75,16 @@ const Routes = () => {
           value={{
             dedupingInterval: 4000,
             loadingTimeout: 5000,
+            refreshWhenHidden: false,
             suspense: true,
-            refreshWhenOffline: true,
+            // refreshWhenOffline: true,
             // refreshInterval: 5000,
             fetcher,
           }}
         >
           <AdminProvider>
             <div className={classes.root}>
+              {/* <UserInfoListne /> */}
               <CssBaseline />
 
               <NavBar />
@@ -129,6 +133,27 @@ const Routes = () => {
                         path={adminRouteLink.SIGNUP_LINK}
                         exact
                         component={Signup}
+                      />
+                      <Route
+                        path={adminRouteLink.ADMIN_MANAGE_USER_LINK}
+                        exact
+                        component={AdminDashboard}
+                      />
+                      <Route
+                        path={adminRouteLink.ADMIN_COMPTE_LINK}
+                        exact
+                        component={AdminDashboard}
+                      />
+
+                      <Route
+                        path={adminRouteLink.ADMIN_MANAGE_ACTION_LINK}
+                        exact
+                        component={AdminDashboard}
+                      />
+                      <Route
+                        path={adminRouteLink.ADMIN_MANAGE_PRIVILEGE_LINK}
+                        exact
+                        component={AdminDashboard}
                       />
                     </Switch>
                     <Alert />

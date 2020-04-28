@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
 
 const SelectorField = ({
+  multiple = true,
   value,
   handleChange,
   labelText,
@@ -13,7 +14,6 @@ const SelectorField = ({
   values,
   name,
   optionRender,
-  className,
   label,
   placeholder,
   variant = "outlined",
@@ -26,6 +26,7 @@ const SelectorField = ({
   selectedValues,
   classes = {},
   addButton,
+  disableCloseOnSelect = true,
   defaultOption = false,
   ...props
 }) => {
@@ -51,8 +52,8 @@ const SelectorField = ({
         <>
           <Autocomplete
             name={name}
-            multiple
-            disableCloseOnSelect
+            multiple={multiple}
+            disableCloseOnSelect={disableCloseOnSelect}
             options={values}
             noOptionsText="aucun resultat"
             getOptionLabel={optionLabel}
@@ -67,7 +68,6 @@ const SelectorField = ({
               <TextField
                 {...params}
                 label={label}
-                className={className}
                 placeholder={placeholder}
                 variant={variant}
                 margin="dense"

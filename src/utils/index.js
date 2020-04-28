@@ -90,6 +90,21 @@ const objectFromArray = async (array, key) => {
   }
   return val;
 };
+
+const dateToText = (date = "2020-04-18T18:07:09.753Z") => {
+  const madate = new Date("2020-04-18T18:07:09.753Z");
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    second: "numeric",
+    minute: "numeric",
+  };
+
+  return madate.toLocaleDateString(undefined, options);
+};
 export {
   performContextInitial,
   objectFromArray,
@@ -99,4 +114,5 @@ export {
   sleep,
   removeArrayFromArray,
   removeUndefined,
+  dateToText,
 };

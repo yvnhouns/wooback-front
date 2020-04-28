@@ -5,22 +5,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import context from "../context/AdminContext";
 
-
-import { isAuthenticated } from "./index";
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    maxWidth: "345px",
-    margin: "auto",
-    padding: theme.spacing(1, 2)
-  }
-}));
-
 const Signup = () => {
   const classes = useStyles();
   let location = useLocation();
   let history = useHistory();
-  const { signup, signupError } = useContext(context).auth;
+  const { signup, signupError, isAuthenticated } = useContext(context).auth;
 
   const nextStep = () => {
     location.state !== undefined
@@ -57,3 +46,11 @@ const Signup = () => {
 };
 
 export default Signup;
+
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    maxWidth: "345px",
+    margin: "auto",
+    padding: theme.spacing(1, 2),
+  },
+}));

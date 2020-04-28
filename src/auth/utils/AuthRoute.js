@@ -4,22 +4,23 @@ import { Route, Redirect } from "react-router-dom";
 import { SIGNIN_LINK, NOT_AUTHORIZATION_LINK } from "../../routerLinks";
 import context from "../../context/AdminContext";
 
-const AdminRoute = ({ component: Component, ...rest }) => {
+const AuthRoute = ({ component: Component, ...rest }) => {
   const { isAuthenticatedUser } = useContext(context).auth;
+  const { user } = isAuthenticatedUser;
 
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         isAuthenticatedUser ? (
           <>
-            {isAuthenticatedUser.user.role === 1 ? (
+            {user.accesses ? (
               <Component {...props} />
             ) : (
               <Redirect
                 to={{
                   pathname: NOT_AUTHORIZATION_LINK,
-                  state: { from: props.location }
+                  state: { from: props.location },
                 }}
               />
             )}
@@ -34,4 +35,4 @@ const AdminRoute = ({ component: Component, ...rest }) => {
   );
 };
 
-export default AdminRoute;
+export default AuthRoute;

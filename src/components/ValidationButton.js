@@ -3,8 +3,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Box from "@material-ui/core/Box";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { ButtonWithIcon } from "../../components/assets";
-import SubmittingButton from "../../components/SubmittingButton";
+import { ButtonWithIcon } from "./assets";
+import SubmittingButton from "./SubmittingButton";
 import CachedIcon from "@material-ui/icons/Cached";
 
 const Validation = ({
@@ -29,17 +29,19 @@ const Validation = ({
       className={rootStyle}
     >
       <Box display="flex" width="100%">
-        <Box>
-          <ButtonWithIcon
-            onClick={handleRefresh}
-            disabled={submitting || pristine}
-            className={classes.button}
-            fullWidth
-            icon={<CachedIcon color="primary" />}
-          >
-            Rafraichir
-          </ButtonWithIcon>
-        </Box>
+        {handleRefresh && (
+          <Box>
+            <ButtonWithIcon
+              onClick={handleRefresh}
+              disabled={submitting || pristine}
+              className={classes.button}
+              fullWidth
+              icon={<CachedIcon color="primary" />}
+            >
+              Rafraichir
+            </ButtonWithIcon>
+          </Box>
+        )}
         <Box hidden={mobile} flexGrow={1}></Box>
         <Box display="inline-flex" width={mobile ? "100%" : "auto"}>
           <ButtonWithIcon

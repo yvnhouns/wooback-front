@@ -6,6 +6,13 @@ export const NOT_AUTHORIZATION_LINK = "/authorisation";
 export const ADMIN_DASHBOARD_LINK = "/admin/dashboard";
 export const ADMIN_DASHBOARD_WITH_PARAM_LINK = "/admin/:slug";
 export const ADMIN_IMPORT_LINK = "/admin/import";
+export const ADMIN_MANAGE_USER_LINK = "/admin/manager";
+export const ADMIN_MANAGE_ACTION_LINK = "/admin/manager/actions";
+export const ADMIN_MANAGE_PRIVILEGE_LINK = "/admin/manager/privilege";
+
+export const ADMIN_COMPTE_LINK = "/admin/compte";
+
+
 
 export const ADMIN_PRODUCTS_LINK = "/admin/produits";
 export const ADMIN_CREATE_PRODUCTS_LINK = "/admin/produit";
@@ -18,7 +25,7 @@ export const ADMIN_PRODUCT_LINK = "/#";
 
 export const ADMIN_PRODUCTS_NEW_LINK = "/admin/produit";
 export const ADMIN_PRODUCTS_UPDATE_LINK = "/admin/produit/:id";
-export const ADMIN_PRODUCTS_CATEGORIES_LINK = "/admin/categorie";
+export const ADMIN_PRODUCTS_CATEGORIES_LINK = "/admin/categories";
 export const ADMIN_PRODUCTS_SELECTIONS_LINK = "/admin/products/selections";
 export const ADMIN_PRODUCTS_SELECTIONS_CREATE_LINK =
   "/admin/products/selections/create";

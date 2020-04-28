@@ -23,7 +23,7 @@ const Row = ({
   post,
   isCurrent,
 }) => {
-  const product = post.content;
+  const product = post.content || {};
   const classes = useStyles({ status: product.status });
   const images = product.images;
 
@@ -32,13 +32,13 @@ const Row = ({
       ? `~~${product.status}`
       : "";
 
-  const imageUrl = images.length > 0 ? images[0].src : "";
+  const imageUrl = images && images.length > 0 ? images[0].src : "";
 
   const price = product.price || 0;
   const regular_price = product.regular_price || 0;
   const salePrice = product.sale_price || 0;
 
-  const catCount = product.categories.length;
+  const catCount = product.categories ? product.categories.length : 0;
   const priceToText = () => {
     let val = "";
     val = salePrice || regular_price || price || 0;
@@ -73,15 +73,19 @@ const Row = ({
       product.selections && product.selections.length > 0
         ? product.selections.map((item) => item.name).toString() + ", "
         : "";
-    const categories = product.categories.map((item, index) => (
-      <Chip
-        key={index}
-        component="li"
-        size="small"
-        className={classes.path}
-        label={item.name}
-      />
-    ));
+    const categories = product.categories ? (
+      product.categories.map((item, index) => (
+        <Chip
+          key={index}
+          component="li"
+          size="small"
+          className={classes.path}
+          label={item.name}
+        />
+      ))
+    ) : (
+      <></>
+    );
 
     return (
       <>

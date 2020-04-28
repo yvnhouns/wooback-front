@@ -1,14 +1,14 @@
 import { API } from "../../config";
 
-export const signupApi = async user => {
+export const signupApi = async (user) => {
   try {
     const response = await fetch(`${API}/signup`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     });
     return response.json();
   } catch (err) {
@@ -16,15 +16,15 @@ export const signupApi = async user => {
   }
 };
 
-export const signinApi = async user => {
+export const signinApi = async (user) => {
   try {
     const response = await fetch(`${API}/signin`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user })
+      body: JSON.stringify({ user }),
     });
     return response.json();
   } catch (err) {
@@ -39,18 +39,14 @@ export const authenticateApi = async (data, next) => {
   }
 };
 
-export const signoutApi = async userId => {
-  if (typeof window !== undefined) {
-    localStorage.removeItem("jwt");
-
-    try {
-      const response = await fetch(`${API}/signout/${userId}`, {
-        method: "GET"
-      });
-      return response.json();
-    } catch (err) {
-      console.log(err);
-    }
+export const signoutApi = async (userId) => {
+  try {
+    const response = await fetch(`${API}/signout/${userId}`, {
+      method: "GET",
+    });
+    return response.json();
+  } catch (err) {
+    console.log(err);
   }
 };
 
@@ -61,8 +57,8 @@ export const infoApi = async (userId, token) => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
     return response.json();
   } catch (err) {

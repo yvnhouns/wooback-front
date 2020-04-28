@@ -21,7 +21,6 @@ const SigninDialog = props => {
 
   const {
     signin,
-    authenticate,
     openSigninDialog,
     setOpenSigninDialog,
     signinError,
@@ -74,7 +73,6 @@ const SigninDialog = props => {
           openInDialog={true}
           closeDialog={handleClose}
           signin={signin}
-          authenticate={authenticate}
           signinError={signinError}
 
         />

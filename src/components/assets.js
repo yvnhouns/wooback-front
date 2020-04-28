@@ -14,12 +14,13 @@ import ClearAllIcon from "@material-ui/icons/ClearAll";
 import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import { TextField } from "mui-rff";
-import { InputAdornment, IconButton } from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
 import LockIcon from "@material-ui/icons/Lock";
 import ClearIcon from "@material-ui/icons/Clear";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";
-import { Visibility } from "@material-ui/icons";
+import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import MuiButton from "@material-ui/core/Button";
 import ReplayIcon from "@material-ui/icons/Replay";
@@ -203,46 +204,46 @@ const BootomMoreDetail = ({ title, handleClick, resProps }) => (
 
 const TitleTypography = withStyles({
   root: {
-    fontWeight: "500"
-  }
-})(props => <MuiTypography variant="subtitle1" {...props} />);
+    fontWeight: "500",
+  },
+})((props) => <MuiTypography variant="subtitle1" {...props} />);
 
 const TableHeaderTypography = withStyles({
   root: {
-    fontWeight: "500"
-  }
-})(props => <MuiTypography variant="subtitle2" {...props} />);
+    fontWeight: "500",
+  },
+})((props) => <MuiTypography variant="subtitle2" {...props} />);
 
 const LargeTypography = withStyles({
   root: {
     //fontWeight: "500"
-  }
-})(props => <MuiTypography variant="h5" {...props} />);
+  },
+})((props) => <MuiTypography variant="h5" {...props} />);
 
 const SubLargeTypography = withStyles({
   root: {
     // fontWeight: "500"
-  }
-})(props => <MuiTypography variant="subtitle1" {...props} />);
+  },
+})((props) => <MuiTypography variant="subtitle1" {...props} />);
 
 const SubTitleTypography = withStyles({
   root: {
-    fontWeight: "300"
-  }
-})(props => <MuiTypography variant="body2" {...props} />);
+    fontWeight: "300",
+  },
+})((props) => <MuiTypography variant="body2" {...props} />);
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   header: {
     padding: "0 12px",
-    height: props => props.headerHeight,
-    background: `${theme.palette.grey["50"]}`
+    height: (props) => props.headerHeight,
+    background: `${theme.palette.grey["50"]}`,
   },
   button: {
     margin: theme.spacing(1),
     textTransform: "unset",
     color: theme.palette.grey["A400"],
-    lineHeight: "1"
-  }
+    lineHeight: "1",
+  },
 }));
 
 const Header = ({
@@ -286,7 +287,7 @@ const PasswordField = ({
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
@@ -315,20 +316,20 @@ const PasswordField = ({
               {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>
           </InputAdornment>
-        )
+        ),
       }}
       {...restProps}
     />
   );
 };
 
-const ButtonWithIcon = withStyles(theme => ({
+const ButtonWithIcon = withStyles((theme) => ({
   root: {
     margin: theme.spacing(1),
     textTransform: "unset",
     //  color: theme.palette.grey["A400"],
-    lineHeight: "1"
-  }
+    lineHeight: "1",
+  },
 }))(({ icon = <ReplayIcon />, ...props }) => (
   <MuiButton
     size="small"
@@ -339,13 +340,13 @@ const ButtonWithIcon = withStyles(theme => ({
   />
 ));
 
-const ButtonSimple = withStyles(theme => ({
+const ButtonSimple = withStyles((theme) => ({
   root: {
     margin: theme.spacing(1),
     textTransform: "unset",
     //  color: theme.palette.grey["A400"],
-    lineHeight: "1"
-  }
+    lineHeight: "1",
+  },
 }))(({ ...props }) => (
   <MuiButton size="small" variant="outlined" color="inherit" {...props} />
 ));
@@ -392,5 +393,5 @@ export {
   ButtonSave,
   ClearAllIconButton,
   SaveIconButton,
-  ButtonSimple
+  ButtonSimple,
 };

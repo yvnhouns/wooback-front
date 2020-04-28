@@ -11,6 +11,7 @@ const SimpleTextField = ({
   placeholder,
   variant = "standard",
   fullWidth = true,
+  helperText,
   ...props
 }) => (
   <TextField
@@ -25,6 +26,7 @@ const SimpleTextField = ({
     name={name}
     label={label}
     {...props}
+    helperText={helperText}
   />
 );
 
@@ -47,7 +49,7 @@ const PriceTextField = ({
     name={name}
     label={label}
     InputProps={{
-      startAdornment: <InputAdornment position="start">CFA</InputAdornment>
+      startAdornment: <InputAdornment position="start">CFA</InputAdornment>,
     }}
     {...props}
   />

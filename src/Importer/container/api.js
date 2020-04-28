@@ -129,7 +129,7 @@ export const wooUpdateProductApi = async ({ body, id }) => {
     const response = await wooApi.put("products/" + id, { ...body });
     return response;
   } catch (err) {
-    console.log({ err });
+    
     console.log(err);
   }
 };

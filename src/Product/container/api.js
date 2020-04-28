@@ -105,8 +105,7 @@ export const wooUpdateProductApi = async ({ body, id }) => {
     const response = await wooApi.put("products/" + id, { ...body });
     return response;
   } catch (err) {
-    console.log({ err });
-    console.log(err);
+   console.log(err);
   }
 };
 
@@ -115,7 +114,6 @@ export const wooUpdateManyProductsApi = async (data) => {
     const response = await wooApi.post("products/batch", { ...data });
     return response;
   } catch (err) {
-    console.log({ err });
     console.log(err);
   }
 };

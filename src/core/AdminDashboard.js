@@ -64,27 +64,27 @@ const Dashboard = ({ width, height, ...restProps }) => {
     ...componentState, // permet de partager le state relatif au init du content en cours à tous ses enfants
   };
   const currentPath = history.location.pathname;
+  const { user } = isAuthenticatedUser;
 
   useEffect(() => {
     const ten = renderContent();
-
-    ten
-      ? initializeViewerContents(ten.content, ten.title)
-      : history.push(routeLink.ADMIN_DASHBOARD_LINK);
-
+    perfomrContentRender(ten);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     const ten = renderContent();
-
-    ten
-      ? initializeViewerContents(ten.content, ten.title)
-      : history.push(routeLink.ADMIN_DASHBOARD_LINK);
-
-    // if (currentPath === routeLink.ADMIN_DASHBOARD_LINK) setComponentState({});
+    perfomrContentRender(ten);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPath]);
+
+  const perfomrContentRender = (component) => {
+    component
+      ? component.isAllowed(user)
+        ? initializeViewerContents(component.content, component.title)
+        : history.push(routeLink.NOT_AUTHORIZATION_LINK)
+      : history.push(routeLink.ADMIN_DASHBOARD_LINK);
+  };
 
   useEffect(() => {
     myRef.current.scrollTo(0, 0);
@@ -106,10 +106,11 @@ const Dashboard = ({ width, height, ...restProps }) => {
           content: component.content,
           title: component.title,
           action: component.action,
+          isAllowed: component.isAllowed,
         }
       : undefined;
   };
-
+  
   return (
     <div name="moi" ref={myRef} className={classes.root}>
       {contents.length > 0 && (

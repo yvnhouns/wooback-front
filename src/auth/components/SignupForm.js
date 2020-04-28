@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useState } from "reinspect";
 
 import {
@@ -7,7 +7,7 @@ import {
   IconButton,
   Button,
   CssBaseline,
-  Typography
+  Typography,
 } from "@material-ui/core";
 import { Visibility } from "@material-ui/icons";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
@@ -23,18 +23,18 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     display: "flex",
     flexWrap: "wrap",
-    textAlign: "center"
+    textAlign: "center",
   },
   button: {
     margin: theme.spacing(1),
-    minWidth: "150px"
+    minWidth: "150px",
   },
   textField: {
-    margin: theme.spacing(1, 0)
+    margin: theme.spacing(1, 0),
   },
   paper: {
     maxWidth: "500px",
@@ -42,18 +42,18 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(5, 3),
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
-  }
+    margin: theme.spacing(3, 0, 2),
+  },
 }));
 
 const SignupForm = ({
   openInDialog,
   signup,
-  authenticate,
   signupError,
+  setError,
   ...props
 }) => {
   const classes = useStyles();
@@ -65,13 +65,13 @@ const SignupForm = ({
     password: "",
     phone: "",
     error: signupError,
-    success: false
+    success: false,
   };
 
   const [values, setValues] = useState({
     ...dataInit,
 
-    success: false
+    success: false,
   });
 
   useEffect(() => {
@@ -79,36 +79,44 @@ const SignupForm = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signupError]);
 
-  const handleChange = name => event => {
+  const handleChange = (name) => (event) => {
     setValues({
       ...values,
       error: false,
       success: false,
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
   const { nom, email, password, phone, error } = values;
 
-  const clickSubmit = event => {
+  const clickSubmit = (event) => {
     event.preventDefault();
     setValues({ ...values, error: false, success: false });
     const user = {
       nom,
       email,
       password,
-      phone
+      phone,
     };
 
-    signup(user, () => {
-      openInDialog && props.closeDialog();
-      props.nextStep && props.nextStep();
+    signup(user, (data) => {
+      if (data) {
+        const { error } = data;
+        error && setValues({ ...values, error: error, loading: false });
+        if (!error) {
+          openInDialog && props.closeDialog();
+          props.nextStep && props.nextStep();
+        }
+      }
     });
   };
 
   const showError = () => {
     return error ? (
-      <Typography variant="subtitle2">{error} </Typography>
+      <Typography variant="subtitle2" color="secondary">
+        {error}
+      </Typography>
     ) : (
       <div />
     );
@@ -117,7 +125,7 @@ const SignupForm = ({
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
 
@@ -136,7 +144,7 @@ const SignupForm = ({
             <InputAdornment position="start">
               <AccountCircleIcon />
             </InputAdornment>
-          )
+          ),
         }}
       />
 
@@ -154,7 +162,7 @@ const SignupForm = ({
             <InputAdornment position="start">
               <MailIcon />
             </InputAdornment>
-          )
+          ),
         }}
       />
 
@@ -170,7 +178,7 @@ const SignupForm = ({
             <InputAdornment position="start">
               <PhoneAndroidIcon />
             </InputAdornment>
-          )
+          ),
         }}
         onChange={handleChange("phone")}
       />
@@ -199,7 +207,7 @@ const SignupForm = ({
                 {showPassword ? <Visibility /> : <VisibilityOff />}
               </IconButton>
             </InputAdornment>
-          )
+          ),
         }}
       />
 
@@ -254,24 +262,24 @@ const SignupForm = ({
 
 export default SignupForm;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     margin: 0,
-    padding: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   closeButton: {
     position: "absolute",
     right: theme.spacing(1),
     top: theme.spacing(1),
-    color: theme.palette.grey[500]
+    color: theme.palette.grey[500],
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main
-  }
+    backgroundColor: theme.palette.secondary.main,
+  },
 });
 
-const DialogTitle = withStyles(styles)(props => {
+const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root}>
@@ -291,16 +299,16 @@ const DialogTitle = withStyles(styles)(props => {
   );
 });
 
-const DialogContent = withStyles(theme => ({
+const DialogContent = withStyles((theme) => ({
   root: {
-    padding: theme.spacing(2)
-  }
+    padding: theme.spacing(2),
+  },
 }))(MuiDialogContent);
 
-const DialogActions = withStyles(theme => ({
+const DialogActions = withStyles((theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(1),
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 }))(MuiDialogActions);

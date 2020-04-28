@@ -2,9 +2,8 @@ import React from "react";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/core/styles";
 
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarIcon from "@material-ui/icons/Star";
-import Radio from "@material-ui/icons/Radio";
+// import StarIcon from "@material-ui/icons/Star";
+// import Radio from "@material-ui/icons/Radio";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 
@@ -58,19 +57,19 @@ const useStyles = makeStyles({
   }
 });
 
-function StyledRadio(props) {
-  const classes = useStyles();
+// function StyledRadio(props) {
+//   const classes = useStyles();
 
-  return (
-    <Radio
-      className={classes.root}
-      //  color="default"
-      color="primary"
-      icon={<StarIcon />}
-      {...props}
-    />
-  );
-}
+//   return (
+//     <Radio
+//       className={classes.root}
+//       //  color="default"
+//       color="primary"
+//       icon={<StarIcon />}
+//       {...props}
+//     />
+//   );
+// }
 
 // Inspired by blueprintjs
 function StyledRadioMui({

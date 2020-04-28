@@ -12,7 +12,7 @@ import { API } from "../../config";
 import queryString from "query-string";
 import { fetcherWithToken } from "../../utils/fecthers";
 
-import { encodeProductsFields } from "./utils";
+import { convertNumberFieds } from "./utils";
 
 const performances = (dispatch, auth) => {
   const createProduct = (formData, next, isAuth) => {
@@ -26,7 +26,7 @@ const performances = (dispatch, auth) => {
 
   const updateProduct = async (post, next) => {
     const { user, token } = auth;
-    let content = (await encodeProductsFields([{ ...post.content }], true))[0];
+    let content = (await convertNumberFieds([{ ...post.content }]))[0];
 
     updatePostApi(user._id, token, { ...post, content }).then((data) => {
       checkErrorData(data, next, async () => {
@@ -79,7 +79,7 @@ const performances = (dispatch, auth) => {
     return `${API}/categories/${user._id}`;
   };
 
-  const getFecther = () => {
+  const getFetcher = () => {
     const { token } = auth;
     const fetcher = (link) => fetcherWithToken(link, token);
     return fetcher;
@@ -106,7 +106,7 @@ const performances = (dispatch, auth) => {
 
   const synchroneProducts = async (products, next) => {
     const { user, token } = auth;
-    const values = await encodeProductsFields(products, true);
+    const values = await convertNumberFieds(products);
     synchroneApi(user._id, token, values).then((data) => {
       checkErrorData(data, next, async () => {
         next({ success: true, data: [] });
@@ -119,7 +119,7 @@ const performances = (dispatch, auth) => {
     updateProduct,
     getProductsListSearchFilterUrl,
     getProductsListPartialSearchFilterUrl,
-    getFecther,
+    getFetcher,
     wooUpdateProduct,
     getProductsCategoriesUrl,
     wooUpdateManyProducts,

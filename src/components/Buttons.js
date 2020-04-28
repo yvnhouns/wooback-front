@@ -9,7 +9,7 @@ import ClearAllIcon from "@material-ui/icons/ClearAll";
 import MuiLink from "@material-ui/core/Link";
 import InsertPhotoIcon from "@material-ui/icons/InsertPhoto";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
-import { IconButton } from "@material-ui/core";
+import  IconButton  from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
 import Fab from "@material-ui/core/Fab";
 import EditIcon from "@material-ui/icons/Edit";

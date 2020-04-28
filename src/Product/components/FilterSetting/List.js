@@ -33,6 +33,7 @@ export default function SettingsList({ options, handleToggle }) {
               <Checkbox
                 edge="end"
                 // onChange={() => handleToggle(value.id)}
+                onClick={() => handleToggle(value.id)}
                 checked={value.active}
                 inputProps={{ "aria-labelledby": labelId }}
               />

@@ -15,7 +15,7 @@ const init = {
   signupError: "",
   signinError: "",
   adminMode: false,
-  sessionId: "::1"
+  sessionId: "::1",
 };
 
 const reducer = (state, action) => {
@@ -45,62 +45,32 @@ const reducer = (state, action) => {
       return { ...state, adminMode: action.payload };
     case types.SET_CURRENT_SESSION:
       return { ...state, sessionId: action.payload };
-    case types.HANDLE_CHANGE_USER:
-      return { ...state, ...performSocketUserChange(state, action.payload) };
     case types.HANDLE_AUTH_OUT:
       return { ...state, isAuthenticatedUser: false };
     case types.SET_USER_INFO:
       return {
         ...state,
-        isAuthenticatedUser: {
-          ...state.isAuthenticatedUser,
-          user: action.payload
-        }
+        isAuthenticatedUser: action.payload,
       };
     default:
       return state;
   }
 };
 
-const authenticate = async data => {
-  if (typeof window !== undefined) {
-    localStorage.setItem("jwt", JSON.stringify(data));
-  }
-};
-const signUp = payload => {
-  let update;
-  if (payload.error) {
-    update = {
-      isAuthenticatedUser: false,
-      signupError: payload.error
-    };
-  } else {
-    authenticate(payload);
-    update = { isAuthenticatedUser: payload, signupError: "", signinError: "" };
-  }
+const signUp = (payload) => {
+  const update = {
+    isAuthenticatedUser: payload,
+    signupError: "",
+    signinError: "",
+  };
   return update;
 };
 
-const signIn = payload => {
-  let update;
-  if (payload.error) {
-    update = {
-      isAuthenticatedUser: false
-    };
-  } else {
-    authenticate(payload);
-    update = { isAuthenticatedUser: payload, signupError: "" };
-  }
+const signIn = (payload) => {
+  let update = { isAuthenticatedUser: payload, signupError: "" };
   return update;
 };
 
-const socketEvent = ["userChange"];
 const key = "auth";
-export { key, init, socketEvent };
+export { key, init };
 export default reducer;
-
-const performSocketUserChange = (state, newUser) => {
-  const isAuthenticatedUser = { ...state.isAuthenticatedUser, user: newUser };
-  authenticate(isAuthenticatedUser);
-  return { isAuthenticatedUser };
-};

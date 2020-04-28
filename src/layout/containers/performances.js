@@ -1,11 +1,11 @@
 import actions from "./actions";
 
-const performances = dispatch => {
-  const setCurrentViewTitle = title => {
+const performances = (dispatch) => {
+  const setCurrentViewTitle = (title) => {
     dispatch(actions.setCurrentViewTitleAction(title));
   };
 
-  const setCurrentViewAction = action => {
+  const setCurrentViewAction = (action) => {
     dispatch(actions.setCurrentViewActionAction(action));
   };
 
@@ -14,12 +14,10 @@ const performances = dispatch => {
   };
 
   const initializeViewerContents = (content, title) => {
-    dispatch(
-      actions.initializeViewerContentsAction({ content, title })
-    );
+    dispatch(actions.initializeViewerContentsAction({ content, title }));
   };
 
-  const setCurrentState = state => {
+  const setCurrentState = (state) => {
     dispatch(actions.setCurrentStateActions(state));
   };
 
@@ -31,7 +29,7 @@ const performances = dispatch => {
     dispatch(actions.previousAction(""));
   };
 
-  const viewHandleChange = component => {
+  const viewHandleChange = (component) => {
     dispatch(actions.viewHandleChangeAction(component));
   };
 
@@ -48,7 +46,7 @@ const performances = dispatch => {
     previous,
     viewHandleChange,
     initializeViewerContents,
-    setCurrentViewerTitleAndAction
+    setCurrentViewerTitleAndAction,
   };
 };
 

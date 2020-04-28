@@ -28,10 +28,10 @@ export default ({
   );
 };
 
-export const defaultSuscriptioin = () => ({
+export const defaultSuscriptioin = {
   submitting: true,
   pristine: true,
   valid: true,
   dirty: true,
   modified: true,
-});
+};

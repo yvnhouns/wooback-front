@@ -7,13 +7,17 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import TreeView from "@material-ui/lab/TreeView";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import Paper from "@material-ui/core/Paper";
 import TreeItem from "@material-ui/lab/TreeItem";
 import useSWR from "swr";
 import { TREE_URL } from "../containers/constants";
 import Suspenser from "../../components/Suspenser";
+import LinearProgress from "@material-ui/core/LinearProgress";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    padding: theme.spacing(3, 2),
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -33,6 +37,7 @@ const Tree = () => {
   const { data } = useSWR(TREE_URL, {
     initialData: [],
     suspense: true,
+    refreshInterval: 1000,
   });
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -47,41 +52,49 @@ const Tree = () => {
     </TreeItem>
   );
 
+  const count = data.length;
+
   return (
-    <div className={classes.root}>
-      {data.map((category) => (
-        <ExpansionPanel
-          disabled={category.children.length === 0}
-          expanded={expanded === category.id}
-          onChange={handleChange(category.id)}
-          key={category.id}
-        >
-          <ExpansionPanelSummary
-            expandIcon={<ExpandMoreIcon />}
-            aria-controls={`${category.id}-content`}
-            id={`${category.id}-header`}
-          >
-            <Typography className={classes.heading}>
-              {category.fullName}
-            </Typography>
-            {/* <Typography className={classes.secondaryHeading}>
+    <React.Suspense fallback={<LinearProgress />}>
+      <Paper className={classes.root}>
+        {count > 0 ? (
+          data.map((category) => (
+            <ExpansionPanel
+              disabled={category.children.length === 0}
+              expanded={expanded === category.id}
+              onChange={handleChange(category.id)}
+              key={category.id}
+            >
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls={`${category.id}-content`}
+                id={`${category.id}-header`}
+              >
+                <Typography className={classes.heading}>
+                  {category.fullName}
+                </Typography>
+                {/* <Typography className={classes.secondaryHeading}>
               I am an expansion panel
             </Typography> */}
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <TreeView
-              multiSelect={false}
-              className={classes.root}
-              defaultCollapseIcon={<ExpandMoreIcon />}
-              defaultExpanded={[`${category.id}`]}
-              defaultExpandIcon={<ChevronRightIcon />}
-            >
-              {renderTree(category)}
-            </TreeView>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-      ))}
-    </div>
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <TreeView
+                  multiSelect={false}
+                  className={classes.root}
+                  defaultCollapseIcon={<ExpandMoreIcon />}
+                  defaultExpanded={[`${category.id}`]}
+                  defaultExpandIcon={<ChevronRightIcon />}
+                >
+                  {renderTree(category)}
+                </TreeView>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          ))
+        ) : (
+          <Typography>Aucune catégories trouvée</Typography>
+        )}
+      </Paper>
+    </React.Suspense>
   );
 };
 
