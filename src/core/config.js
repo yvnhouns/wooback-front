@@ -82,7 +82,7 @@ export const generalItems = [
     id: "manager",
     title: "Gestion des droits",
     path: routeLink.ADMIN_MANAGE_USER_LINK,
-    itemIcon: <AssignmentIndIcon color="primary" />,
+    itemIcon: <AssignmentIndIcon />,
     content: (props) => <Manager {...props} />,
     action: <></>,
     isAllowed: (user) => isSupUser(user),
