@@ -1,6 +1,6 @@
 import React from "react";
-
-import { makeStyles } from "@material-ui/core/styles";
+import SuspensePaper from "../../components/SuspensePaper";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -14,6 +14,9 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Chip from "@material-ui/core/Chip";
+import Tooltip from "@material-ui/core/Tooltip";
+
+const Images = React.lazy(() => import("./ImagesLine"));
 
 const Row = ({
   handleToggle,
@@ -138,7 +141,20 @@ const Row = ({
           </Fade>
         )}
         <ListItemAvatar>
-          <Avatar variant="rounded" alt={product.name} src={imageUrl} />
+          <LightTooltip
+            placement="right-start"
+            interactive
+            arrow
+            title={
+              <>
+                <SuspensePaper>
+                  <Images tileData={images || []} />
+                </SuspensePaper>
+              </>
+            }
+          >
+            <Avatar variant="rounded" alt={product.name} src={imageUrl} />
+          </LightTooltip>
         </ListItemAvatar>
         <ListItemText
           primary={
@@ -205,3 +221,13 @@ const useStyles = makeStyles((theme) => ({
     height: "20px",
   },
 }));
+
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: theme.palette.common.white,
+    color: "rgba(0, 0, 0, 0.87)",
+    boxShadow: theme.shadows[1],
+    fontSize: 11,
+    margin: "0px",
+  },
+}))(Tooltip);

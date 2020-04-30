@@ -14,6 +14,7 @@ import { Link as RouterLink } from "react-router-dom";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,7 +79,11 @@ const MenuList = ({ signout, user }) => {
                 onClick={() => parentHandleClick(item.id)}
                 button
               >
-                <ListItemIcon>{item.itemIcon}</ListItemIcon>
+                <ListItemIcon>
+                  <Tooltip title={item.title} interactive>
+                    {item.itemIcon}
+                  </Tooltip>
+                </ListItemIcon>
                 <ListItemText primary={item.title} />
 
                 {item.child !== undefined && (
@@ -134,7 +139,9 @@ const MenuList = ({ signout, user }) => {
           button
         >
           <ListItemIcon>
-            <ExitToAppIcon />
+            <Tooltip title="Déconnexion" interactive>
+              <ExitToAppIcon />
+            </Tooltip>
           </ListItemIcon>
           <ListItemText primary="Déconnexion" />
         </ListItem>

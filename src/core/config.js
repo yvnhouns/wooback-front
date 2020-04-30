@@ -53,7 +53,7 @@ export const generalItems = [
   },
   {
     id: "categories",
-    title: "Categories",
+    title: "Catégories",
     path: routeLink.ADMIN_PRODUCTS_CATEGORIES_LINK,
     itemIcon: <ListAltIcon />,
     content: (props) => <CategoriesTree {...props} />, //<Order {...props} />,
@@ -80,7 +80,7 @@ export const generalItems = [
   },
   {
     id: "manager",
-    title: "Gestion des droits",
+    title: "Gestion des utilisateurs",
     path: routeLink.ADMIN_MANAGE_USER_LINK,
     itemIcon: <AssignmentIndIcon />,
     content: (props) => <Manager {...props} />,
@@ -106,7 +106,7 @@ export const generalItems = [
       },
       {
         id: "privilege",
-        title: "Privilège",
+        title: "Privilèges",
         itemIcon: <VerifiedUserIcon />,
         content: (props) => <Privilege {...props} />,
         path: routeLink.ADMIN_MANAGE_PRIVILEGE_LINK,

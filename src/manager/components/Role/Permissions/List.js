@@ -198,7 +198,7 @@ const PermissionList = ({
         </List>
       ) : (
         <TitleTypography style={{ padding: "5px 15px" }}>
-          Aucune permission n'est liée à ce privillège. Veuillez en ajouter. 
+          Aucun accès n'est liée à ce privillège. Veuillez en ajouter.
         </TitleTypography>
       )}
     </div>
