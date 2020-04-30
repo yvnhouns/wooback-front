@@ -39,6 +39,7 @@ const ProductsList = ({
 
   const {
     data: { results: posts, count },
+    error,
   } = useSWR(url, fetcher, {
     refreshInterval: 7000,
     dedupingInterval: 4000,
@@ -149,7 +150,7 @@ const ProductsList = ({
     ));
   };
 
-  return (
+  return !error ? (
     <>
       <div className={classes.list}>
         {/* <CssBaseline /> */}
@@ -194,6 +195,8 @@ const ProductsList = ({
         {count} produit{pluriel(count)} trouvé{pluriel(count)}{" "}
       </TitleTypography>
     </>
+  ) : (
+    <> Aucune données recueillies </>
   );
 };
 
