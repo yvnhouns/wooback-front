@@ -68,19 +68,18 @@ const Row = ({
 
         <ListItemText
           primary={
-            <TitleTypography
-              variant="subtitle2"
-              color="primary"
-              className={classes.inline}
-            >
+            <TitleTypography variant="subtitle2" color="primary">
               {value.name}
             </TitleTypography>
           }
           secondary={value.id}
+          disableTypography
         />
         {!checkable &&
           (!value.depreciated ? (
-            <ListItemSecondaryAction>{ submitUpdate && editableButton}</ListItemSecondaryAction>
+            <ListItemSecondaryAction>
+              {submitUpdate && editableButton}
+            </ListItemSecondaryAction>
           ) : (
             <CancelIconButton
               onClick={() => handleDelete(value._id)}

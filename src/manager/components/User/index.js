@@ -25,14 +25,14 @@ const UsersList = ({
   ...restProps
 }) => {
   const classes = useStyles();
-  const {
-    data: { error, results: users = [], count, roles },
-  } = useSWR(url, fetcher, {
+  const { data } = useSWR(url, fetcher, {
     refreshInterval: 2000,
     dedupingInterval: 500,
-    initialData: { count: 0 },
     suspense: true,
   });
+
+  const error = !data ? "erreur requettage" : data.error ? data.error : false;
+  const { results: users = [], count = 0, roles = [] } = !error ? data : {};
 
   const handleDelete = async (user) => {
     await removeUsers([user._id], ({ error, success }) => {
@@ -83,7 +83,7 @@ const UsersList = ({
     ));
   };
 
-  const table = (
+  const table = () => (
     <MaterialTable
       title="Utilisateurs"
       columns={initColumns}
@@ -121,30 +121,37 @@ const UsersList = ({
     />
   );
 
-  return (
-    !error && (
-      <>
-        <div className={classes.list}>
-          {/* <CssBaseline /> */}
-          {count > 0 && table}
-        </div>
-        <div name="vous" className={classes.appBar}>
-          <Fab
-            size="medium"
-            color="primary"
-            aria-label="add"
-            className={classes.fabButton}
-            //  onClick={(e) => handleClick()}
-          >
-            <AddIcon />
-          </Fab>
-          <div className={classes.grow} />
-        </div>
-        <TitleTypography color="secondary" style={{ paddingLeft: "20px" }}>
-          {count} produit{pluriel(count)} trouvé{pluriel(count)}{" "}
-        </TitleTypography>
-      </>
-    )
+  return !error ? (
+    <>
+      <div className={classes.list}>
+        {/* <CssBaseline /> */}
+        {count > 0 ? (
+          table()
+        ) : (
+          <TitleTypography> Aucun utilisateur trouvé</TitleTypography>
+        )}
+      </div>
+      <div name="vous" className={classes.appBar}>
+        <Fab
+          size="medium"
+          color="primary"
+          aria-label="add"
+          className={classes.fabButton}
+          //  onClick={(e) => handleClick()}
+        >
+          <AddIcon />
+        </Fab>
+        <div className={classes.grow} />
+      </div>
+      <TitleTypography color="secondary" style={{ paddingLeft: "20px" }}>
+        {count} produit{pluriel(count)} trouvé{pluriel(count)}{" "}
+      </TitleTypography>
+    </>
+  ) : (
+    <TitleTypography color="secondary">
+      {" "}
+      Une erreur s'est produite{" "}
+    </TitleTypography>
   );
 };
 

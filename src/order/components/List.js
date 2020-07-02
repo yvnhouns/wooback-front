@@ -1,32 +1,54 @@
 import React, { useEffect, lazy, useState } from "react";
-import HourglassEmptyIcon from "@material-ui/icons/HourglassEmpty";
-import SystemUpdateAltIcon from "@material-ui/icons/SystemUpdateAlt";
-import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
-import { TitleTypography } from "../../../components/Typography";
+// import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
+import { TitleTypography } from "../../components/Typography";
 import { List, AutoSizer } from "react-virtualized";
 import { makeStyles } from "@material-ui/core/styles";
-import { ButtonSimple } from "../../../components/Buttons";
-import Suspenser from "../../../components/Suspenser";
-import SpeedialButton from "../../../components/SpeedialButton";
-const Row = lazy(() => import("./Row"));
+import { ButtonSimple } from "../../components/Buttons";
+import Suspenser from "../../components/Suspenser";
+import SpeedialButton from "../../components/SpeedialButton";
+import useSWR from "swr";
+import AddIcon from "@material-ui/icons/Add";
+import ListSkeleton from "../../components/ListSkeleton";
+import { CREATE_ACTION, UPDATE_ACTION } from "../container/accesses";
 
-const ActionsList = ({
-  accesses,
-  empty,
-  updateMany,
+// const BodyDialog = React.lazy(() => import("./content/BodyDialog"));
+const Row = lazy(() => import("./Row"));
+const Body = React.lazy(() => import("./content"));
+
+const OrderList = ({
+  checkPermission,
   setCurrentViewerTitleAndAction,
-  update,
+  addNextComponent,
   nativeAccesses,
-  remove,
-  removeMany,
+  previous,
   selector = false,
+  multiSelector = false,
   handleSelected,
   selected = [],
+  fetcher,
+  url,
+  idField = "_id",
+  getReadUrl,
+  submit,
+  setCurrentSearch,
+  fieldSearchSelected = "id",
+  rubriqueName = "Commande",
+  updateStatus,
+  getStatusListUrl,
   ...restProps
 }) => {
   const classes = useStyles();
-  // const [current, setCurrent] = useState("");
   const listRef = React.createRef();
+  const { data: sourceData } = useSWR(url, fetcher, {
+    refreshInterval: selector ? 0 : 5000,
+    revalidateOnFocus: true,
+  });
+
+  const error = !sourceData
+    ? true
+    : sourceData && sourceData.error
+    ? true
+    : false;
 
   const [checkData, setCheckData] = useState({
     checked: [...selected],
@@ -35,6 +57,15 @@ const ActionsList = ({
 
   const { checked, checkable } = checkData;
   const checkedCount = checked.length;
+
+  const [state, setState] = useState({
+    data: [],
+    current: "",
+    dialogOpener: false,
+    action: "",
+  });
+  const { data, current, action } = state;
+
   const handleCheckable = () => {
     setCheckData({ ...checkData, checkable: !checkable });
   };
@@ -42,7 +73,7 @@ const ActionsList = ({
   useEffect(() => {
     !selector &&
       setCurrentViewerTitleAndAction(
-        "Liste des actions",
+        "Liste commandes",
         <ButtonSimple variant="text" onClick={handleCheckable}>
           <strong> {!checkable ? "Sélectioner" : "Annuler"} </strong>
         </ButtonSimple>
@@ -51,23 +82,59 @@ const ActionsList = ({
   }, [checkable]);
 
   useEffect(() => {
-    if (JSON.stringify(selected) !== JSON.stringify(checked)) {
-      setCheckData({ ...checkData, checked: selected });
+    if (sourceData && !sourceData.error) {
+      const { results } = sourceData;
+      setState((state) => ({ ...state, data: results }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected]);
+  }, [sourceData]);
+
+  /* action */
+
+  const handleClick = (actionEvent, item) => {
+    const id = item ? item[idField] : undefined;
+
+    setState((state) => ({
+      ...state,
+      current: id,
+      action: actionEvent,
+    }));
+
+    addNextComponent((ownState) => (
+      <React.Suspense fallback={<ListSkeleton count={8} />}>
+        <Body
+          fetcher={fetcher}
+          getReadUrl={getReadUrl}
+          // submit={submit(actionEvent)}
+          // nextStep={nextStep(actionEvent, id)}
+          value={item}
+          id={id}
+          action={action}
+          updateStatus={updateStatus}
+          getStatusListUrl={getStatusListUrl}
+          checkPermission={checkPermission}
+        />
+      </React.Suspense>
+    ));
+  };
 
   function rowRenderer({ key, index, isScrolling, isVisible, style, parent }) {
+    const item = data[index];
+    const id = item[idField];
+
     const content = (
       <Suspenser height={80} doubleFeadBack={false}>
         <Row
           handleToggle={handleToggle}
-          handleDelete={remove}
           checked={checked}
           checkable={checkable}
-          value={accesses[index]}
-          // isCurrent={current === accesses[index].id}
-          submitUpdate={!selector ? update : undefined}
+          value={data[index]}
+          isCurrent={current === id}
+          handleClick={() => handleClick(UPDATE_ACTION, item)}
+          idField={idField}
+          multiSelector={multiSelector}
+          selector={selector}
+          checkPermission={checkPermission}
         />
       </Suspenser>
     );
@@ -80,19 +147,21 @@ const ActionsList = ({
   }
 
   const findBody = (id) => {
-    return accesses.find((item) => item._id === id);
+    return data.find((item) => item[idField] === id);
   };
 
   const handleToggle = (value) => {
     const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    let newChecked = [...checked];
+
+    const singleSelection = selector && !multiSelector;
 
     if (currentIndex === -1) {
-      newChecked.push(value);
+      singleSelection ? (newChecked = [value]) : newChecked.push(value);
       const v = findBody(value);
       selector && handleSelected(v, "push");
     } else {
-      newChecked.splice(currentIndex, 1);
+      singleSelection ? (newChecked = []) : newChecked.splice(currentIndex, 1);
       const v = findBody(value);
       selector && handleSelected(v, "remove");
     }
@@ -100,44 +169,14 @@ const ActionsList = ({
     setCheckData({ ...checkData, checked: newChecked });
   };
 
-  const count = accesses.length;
+  // const getCurrentValue = () => {
+  //   const value = data.find((item) => item[`${idField}`] === current);
+  //   return value;
+  // };
 
-  const upToDate = async () => {
-    const values = Object.values(nativeAccesses);
-    const final = accesses;
+  const count = error ? 0 : data.length;
 
-    for (let i = 0; i < values.length; i++) {
-      const key = values[i];
-      const index = accesses.findIndex((item) => item.id === key);
-      index === -1 && final.push({ id: key, name: "" });
-    }
-
-    for (let i = 0; i < final.length; i++) {
-      const access = final[i];
-      const index = values.findIndex((item) => item === access.id);
-      final[i] = { ...access, depreciated: index === -1 ? true : false };
-    }
-
-    final.length && (await updateMany(final));
-  };
-
-  const deleteSelection = () => {
-    checkable && checkedCount > 0 && removeMany(checked);
-    setCheckData({ ...checkData, checked: [] });
-  };
-
-  const deleteManyAction =
-    checkable && checkedCount > 0
-      ? [
-          {
-            name: "Supprimer toute la sélection",
-            icon: <DeleteSweepIcon color="secondary" />,
-            handleClick: deleteSelection,
-          },
-        ]
-      : [];
-
-  return (
+  return !error ? (
     <>
       <div className={classes.list}>
         {/* <CssBaseline /> */}
@@ -152,7 +191,7 @@ const ActionsList = ({
                       width={width}
                       height={height}
                       rowCount={count}
-                      rowHeight={50}
+                      rowHeight={85}
                       rowRenderer={rowRenderer}
                     />
                   </>
@@ -162,25 +201,20 @@ const ActionsList = ({
           </>
         ) : (
           <TitleTypography style={{ padding: "5px 15px" }}>
-            Auccune actions trouvée{" "}
+            Aucune {rubriqueName} trouvée{" "}
           </TitleTypography>
         )}
       </div>
+
       {!selector && (
-        <div name="vous" className={classes.appBar}>
+        <div name="action" className={classes.appBar}>
           <SpeedialButton
             actions={[
               {
-                name: "Vider",
-                icon: <HourglassEmptyIcon />,
-                handleClick: empty,
+                name: "Ajouter",
+                icon: <AddIcon />,
+                handleClick: () => handleClick(CREATE_ACTION),
               },
-              {
-                name: "Mettre a jour",
-                icon: <SystemUpdateAltIcon />,
-                handleClick: upToDate,
-              },
-              ...deleteManyAction,
             ]}
           />
           <div className={classes.grow} />
@@ -189,7 +223,7 @@ const ActionsList = ({
 
       {!checkable ? (
         <TitleTypography color="secondary" style={{ paddingLeft: "20px" }}>
-          {count} actions {pluriel(count)} trouvée{pluriel(count)}{" "}
+          {count} {rubriqueName} {pluriel(count)} trouvée{pluriel(count)}{" "}
         </TitleTypography>
       ) : (
         <TitleTypography color="primary" style={{ paddingLeft: "20px" }}>
@@ -198,19 +232,23 @@ const ActionsList = ({
         </TitleTypography>
       )}
     </>
+  ) : (
+    <TitleTypography color="secondary">
+      Une erreur s'est produite
+    </TitleTypography>
   );
 };
 
 const isEqual = (prev, next) => {
   return (
     JSON.stringify({
-      accesses: prev !== null ? prev.accesses : "",
+      url: prev !== null ? prev.url : "",
       selected: prev !== null ? prev.selected : [],
-    }) === JSON.stringify({ accesses: next.accesses, delected: next.selected })
+    }) === JSON.stringify({ url: next.url, selected: next.selected })
   );
 };
 
-export default React.memo(ActionsList, isEqual);
+export default React.memo(OrderList, isEqual);
 
 const useStyles = makeStyles((theme) => ({
   list: {

@@ -8,20 +8,20 @@ import Fade from "@material-ui/core/Fade";
 import Badge from "@material-ui/core/Badge";
 import Divider from "@material-ui/core/Divider";
 import * as routeLink from "../../routerLinks";
-
 import { Link as RouterLink } from "react-router-dom";
 
 const UserMenu = ({ signout, adminRole, isAuthenticatedUser }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = event => {
+  const { user } = isAuthenticatedUser;
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const logOut = async event => {
+  const logOut = async (event) => {
     signout(isAuthenticatedUser);
     handleClose(event);
   };
@@ -38,7 +38,7 @@ const UserMenu = ({ signout, adminRole, isAuthenticatedUser }) => {
         onMouseEnter={handleClick}
         // onMouseLeave={handleClose}
       >
-        <AccountCircle />
+        <AccountCircle /> Bonjour {user.nomAfficher}
       </IconButton>
 
       <StyledMenu
@@ -149,40 +149,40 @@ const UserMenu = ({ signout, adminRole, isAuthenticatedUser }) => {
 const StyledMenu = withStyles({
   paper: {
     // border: '1px solid #d3d4d5',
-  }
-})(props => (
+  },
+})((props) => (
   <Menu
     //elevation={1}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
-      horizontal: "center"
+      horizontal: "center",
     }}
     transformOrigin={{
       vertical: "top",
-      horizontal: "center"
+      horizontal: "center",
     }}
     TransitionComponent={Fade}
     {...props}
   />
 ));
 
-const StyledMenuItem = withStyles(theme => ({
+const StyledMenuItem = withStyles((theme) => ({
   root: {
     padding: theme.spacing(1, 2),
     "&:hover": {
-      color: "#007791"
+      color: "#007791",
     },
     "&:focus": {
       // backgroundColor: theme.palette.primary.main,
       "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-        color: theme.palette.common.white
-      }
-    }
-  }
+        color: theme.palette.common.white,
+      },
+    },
+  },
 }))(MenuItem);
 
-const AdminMenuItem = withStyles(theme => ({
+const AdminMenuItem = withStyles((theme) => ({
   root: {
     //backgroundColor: theme.palette.primary,
     padding: theme.spacing(1, 2),
@@ -192,9 +192,9 @@ const AdminMenuItem = withStyles(theme => ({
     "&:focus": {
       "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
         // color: theme.palette.common.white
-      }
-    }
-  }
+      },
+    },
+  },
 }))(MenuItem);
 
 const CountBadge = ({ count }) => {

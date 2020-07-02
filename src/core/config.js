@@ -31,6 +31,10 @@ import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 
+import OrderDashboard from "../order";
+import * as orderAccess from "../order/container/accesses";
+import BookmarkBorderIcon from "@material-ui/icons/BookmarkBorder";
+
 export const generalItems = [
   {
     id: "dashboard",
@@ -50,6 +54,16 @@ export const generalItems = [
     action: <></>,
     access: productAccess.PRODUCTS,
     isAllowed: (user) => checkPermission(user, productAccess.PRODUCTS),
+  },
+  {
+    id: "order",
+    title: "Commande",
+    path: routeLink.ADMIN_ORDER_LINK,
+    itemIcon: <BookmarkBorderIcon />,
+    content: (props) => <OrderDashboard {...props} />,
+    action: <></>,
+    access: orderAccess.ORDER_MENU,
+    isAllowed: (user) => checkPermission(user, orderAccess.ORDER_MENU),
   },
   {
     id: "categories",

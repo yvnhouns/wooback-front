@@ -21,7 +21,7 @@ const Action = ({
   ...props
 }) => {
   const rootContext = React.useContext(context);
-  
+
   const {
     getFetcher,
     getActionsUrl,
@@ -48,7 +48,6 @@ const Action = ({
     refreshInterval: 6000,
     revalidateOnFocus: true,
   });
-
   React.useEffect(() => {
     setValues({
       ...values,

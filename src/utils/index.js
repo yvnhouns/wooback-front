@@ -92,7 +92,7 @@ const objectFromArray = async (array, key) => {
 };
 
 const dateToText = (date = "2020-04-18T18:07:09.753Z") => {
-  const madate = new Date("2020-04-18T18:07:09.753Z");
+  const madate = new Date(date);
   const options = {
     weekday: "long",
     year: "numeric",

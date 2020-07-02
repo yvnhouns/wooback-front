@@ -120,6 +120,11 @@ const Routes = () => {
                         component={AdminDashboard}
                       />
                       <AdminRoute
+                        path={adminRouteLink.ADMIN_ORDER_LINK}
+                        exact
+                        component={AdminDashboard}
+                      />
+                      <AdminRoute
                         path={adminRouteLink.ADMIN_DASHBOARD_WITH_PARAM_LINK}
                         exact
                         component={AdminDashboard}

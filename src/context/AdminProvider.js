@@ -52,11 +52,19 @@ import LayoutReducer, {
 } from "../layout/containers/reducer";
 import LayoutPerformance from "../layout/containers/performances";
 
+import orderReducer, {
+  key as orderKey,
+  init as orderInit,
+} from "../order/container/reducer";
+import orderPerformance from "../order/container/performances";
+import * as orderAccesses from "../order/container/accesses";
+
 const HomeProvider = (props) => {
   // initial rootstate
 
   const initialValue = {
     [AuthKey]: AuthInit,
+    [orderKey]: orderInit,
     [ProductKey]: ProductInit,
     [LayoutKey]: LayoutInit,
     [alertKey]: alertInit,
@@ -66,6 +74,7 @@ const HomeProvider = (props) => {
     permission: {
       accesses: {
         ...managerAccesses,
+        ...orderAccesses,
         ...userAccesses,
         ...importerAccesses,
         ...productAccesses,
@@ -76,6 +85,7 @@ const HomeProvider = (props) => {
   // root reducer
   const rootReducer = combineReducer({
     [AuthKey]: AuthReducer,
+    [orderKey]: orderReducer,
     [ProductKey]: ProductReducer,
     [LayoutKey]: LayoutReducer,
     [alertKey]: alertReducer,
@@ -106,6 +116,11 @@ const HomeProvider = (props) => {
     {
       key: importerKey,
       Performance: importerPerformances,
+      auth,
+    },
+    {
+      key: orderKey,
+      Performance: orderPerformance,
       auth,
     },
     {
