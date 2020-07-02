@@ -12,8 +12,8 @@ const wooStatusTranslate = [
   { id: "processing", label: "En cours", color: orange[700] },
   { id: "on-hold", label: "En attente", color: blueGrey[600] },
   { id: "completed", label: "Terminée", color: blue[900] },
-  { id: "cancelled", label: "Annulé", color: deepOrange[500] },
-  { id: "refunded", label: "Remboursé", color: purple[600] },
+  { id: "cancelled", label: "Annulée", color: deepOrange[500] },
+  { id: "refunded", label: "Remboursée", color: purple[600] },
   { id: "failed", label: "Echouée", color: blueGrey[300] },
 ];
 
